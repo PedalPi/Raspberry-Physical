@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
+#https://www.circuitsathome.com/mcu/programming/reading-rotary-encoder-on-arduino
+#https://github.com/guyc/py-gaugette/blob/master/gaugette/rotary_encoder.py
 class DigitalEncoder(object)
 
     class DigitalState(Enum):

@@ -12,11 +12,8 @@ class Configuration(object):
         self.nextPatchButton = PatchButton(21)
         self.beforePatchButton = PatchButton(20)
 
-        # Effects
-        self.effectButtons = [
-            # empty
-            #EffectButton(Button(?), LED(?))
-        ]
+        # Effect
+        self.effectButton = EffectButton(Button(4), LED(5))
 
         # Configuration
         self.manager = ManagerComponent(

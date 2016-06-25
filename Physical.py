@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from configurations import Configurations
-from action.CurrentActions import CurrentActions
 
 
 class Physical(object):
@@ -10,17 +9,27 @@ class Physical(object):
         self.app = Application()
         self.config = Configurations()
 
+        self.initControllers()
+        self.initActions()
+        self.initComponents()
+
+        self.patchesController.updateDisplay()
+
+    def initControllers(self):
+        self.displayController = DisplayController(self.config.display)
+
+        self.patchesController = PatchesController(self, self)
+        self.effectsController = EffectsController(self, patch)
+        self.paramsController = ParamsController(self)
+
+    def initComponents(self):
         if self.config.display:
             self.config.display.init()
 
-        currentActions = CurrentActions(self.app)
+        self.config.nextPatchButton.action = self.patchesController.nextPatch
+        self.config.beforePatchButton.action = self.patchesController.beforePatch
 
-        self.config.nextPatchButton.action = currentActions.toNextPatch
-        self.config.beforePatchButton.action = currentActions.toBeforePatch
-
-    def initControllers(self):
-        self.effectController = EffectsController(self, patch)
-        self.paramsController = Paramsontroller(self, patch)
+        self.effectButton.action = self.config.effectsController.toggle
 
     def setController(self, controller):
         manager = self.config.manager

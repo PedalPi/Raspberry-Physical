@@ -2,8 +2,9 @@
 
 
 class AbstractConfigurationController(object):
+
     def onSelect(self):
-        self.physical.toParamsController()
+        pass
 
     def onNext(self):
         pass

@@ -1,38 +1,41 @@
+# -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 
 
 class Display(metaclass=ABCMeta):
 
     @abstractmethod
-    void setPixel(int x, int y, Color color):
-        '''
-        Set a specific pixel for a color 
+    def setPixel(self, x, y, color):
+        """
+        Set a specific pixel for a color
 
-        @param x Row position. 0 is first, top to down direction
-        @param y Column position. 0 is first, left to right direction
-        @param color
-        '''
+        :param x Row position. 0 is first, top to down direction
+        :param y Column position. 0 is first, left to right direction
+        :param color
+        """
         ...
 
     @abstractmethod
-    void redraw():
-        '''
+    def redraw(self):
+        """
         Repaint the display, updating changes caused by use of setPixel method
-        '''
+        """
         ...
 
     @abstractmethod
-    void clear():
-        '''
+    def clear(self):
+        """
         Change the Display for initial stage
-        '''
+        """
         ...
 
+    @property
     @abstractmethod
-    int getWidth():
+    def width(self):
         ...
-    
+
+    @property
     @abstractmethod
-    int getHeight():
+    def height(self):
         ...
-}
+

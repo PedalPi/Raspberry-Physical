@@ -20,7 +20,8 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
 
     @author SrMouraSilva
     Based in 2013 Giacomo Trudu - wicker25[at]gmail[dot]com
-    Based in 2010 Limor Fried, Adafruit Industries https://github.com/adafruit/Adafruit_Nokia_LCD/blob/master/Adafruit_Nokia_LCD/PCD8544.py
+    Based in 2010 Limor Fried, Adafruit Industries
+          https://github.com/adafruit/Adafruit_Nokia_LCD/blob/master/Adafruit_Nokia_LCD/PCD8544.py
     Based in CORTEX-M3 version by Le Dang Dung, 2011 LeeDangDung@gmail.com (tested on LPC1769)
     Based in Raspberry Pi version by Andre Wussow, 2012, desk@binerry.de
     Based in Raspberry Pi Java version by Cleverson dos Santos Assis, 2013, tecinfcsa@yahoo.com.br
@@ -105,8 +106,10 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
     def toggleClock(self):
         self.SCLK.on()
         # The pin changes usign wiring pi are 20ns?
-        # The pi4j in Snapshot 1.1.0 are 1MHz ~ 1 microssecond in Raspberry 2      http://www.savagehomeautomation.com/projects/raspberry-pi-with-java-programming-the-internet-of-things-io.html#follow_up_pi4j
-        # Its necessary only 10ns    Pag 22 - https://www.sparkfun.com/datasheets/LCD/Monochrome/Nokia5110.pdf
+        # The pi4j in Snapshot 1.1.0 are 1MHz ~ 1 microssecond in Raspberry 2
+        #  http://www.savagehomeautomation.com/projects/raspberry-pi-with-java-programming-the-internet-of-things-io.html#follow_up_pi4j
+        # Its necessary only 10ns
+        #  Pag 22 - https://www.sparkfun.com/datasheets/LCD/Monochrome/Nokia5110.pdf
         # Not discoment :D
         #Gpio.delayMicroseconds(CLOCK_TIME_DELAY);
         self.SCLK.off()
@@ -145,16 +148,17 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
 
     @privatemethod
     def writeData(self, bankData):
-        #print(bankData)
-        #Iterator<Color> iterator = bankData.msbIterator()
-        #while iterator.hasNext():
-        #    color = iterator.next()
-        #    self.DIN.setState(color == Color.BLACK)
+        iterator = bankData.msbIterator()
+        while iterator.hasNext():
+            color = iterator.nextElement()
+            if color == Color.BLACK:
+                self.DIN.on()
+            else:
+                self.DIN.off()
 
-        #    self.toggleClock()
+            self.toggleClock()
 
-        #bank.setChanged(False)
-        pass
+        bankData.setChanged(False)
 
     @privatemethod
     def setCursorX(self, x):

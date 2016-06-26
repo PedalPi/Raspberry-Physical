@@ -51,7 +51,7 @@ class MsbIterator:
         self.PCB8544DisplayDDramBank = PCB8544DisplayDDramBank
         self.count = 7
 
-    def next(self):
+    def nextElement(self):
         self.count -= 1
         return self.PCB8544DisplayDDramBank.getPixel(self.count)
 

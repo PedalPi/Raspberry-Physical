@@ -18,9 +18,9 @@ class Physical(object):
     def initControllers(self):
         self.displayController = DisplayController(self.config.display)
 
-        self.patchesController = PatchesController(self, self)
+        self.patchesController = PatchesController(self)
         self.effectsController = EffectsController(self, patch)
-        self.paramsController = ParamsController(self)
+        self.paramsController = None #ParamsController(self)
 
     def initComponents(self):
         if self.config.display:

@@ -6,7 +6,7 @@ class Configuration(object):
 
     def __init__(self):
         # Display
-        self.display = None
+        self.display = PCD8544DisplayComponent(1, 2, 3, 4, 5)
 
         # Patch
         self.nextPatchButton = PatchButton(21)

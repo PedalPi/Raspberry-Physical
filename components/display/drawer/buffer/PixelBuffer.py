@@ -26,12 +26,9 @@ class PixelBuffer:
     def hasRealChange(self):
         return self.lastChangeColor != self.color
 
-    def updateLastChangeColor(self, color):
-        """
-        :param Color color
-        """
-        self.lastChangeColor = color
+    def updateLastChangeColor(self):
+        self.lastChangeColor = self.color
 
     def __repr__(self):
         return "Pixel(x=" + str(self.x) + ", y=" + str(self.y) + ") - " + \
-               self.color
+               str(self.color)

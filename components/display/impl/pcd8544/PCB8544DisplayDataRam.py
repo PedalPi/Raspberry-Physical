@@ -65,7 +65,7 @@ class PCB8544DisplayDataRam(object):
         :param int x
         :param int y
         """
-        return self.dataBuffer[x][y/8]
+        return self.dataBuffer[x][int(y/8)]
 
     def getPixel(self, x, y):
         """
@@ -81,8 +81,8 @@ class PCB8544DisplayDataRam(object):
     def isPositionExists(self, x, y):
         notExists = x < 0 \
                  or y < 0 \
-                 or x >= self.display.getWidth() \
-                 or y >= self.display.getHeight()
+                 or x >= self.display.width \
+                 or y >= self.display.height
         return not notExists
 
     def clear(self):

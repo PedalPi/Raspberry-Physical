@@ -62,7 +62,7 @@ class DisplayBuffer(object):
         """
         pixel = self.getPixel(x, y)
 
-        if pixel is not None:
+        if pixel is None:
             return  # or throws?
 
         elif pixel.color == color:
@@ -106,7 +106,7 @@ class DisplayBuffer(object):
 class DisplayBufferIterator(object):
     changes = None
 
-    nextElement = None
+    _nextElement = None
 
     def __init__(self, changes):
         """
@@ -115,19 +115,23 @@ class DisplayBufferIterator(object):
         self.changes = changes
 
     def hasNext(self):
-        self.nextElement = self.findNext()
-        return self.nextElement is not None
+        self._nextElement = self.findNext()
+        return self._nextElement is not None
 
     @privatemethod
     def findNext(self):
-        pixelBuffer = self.changes.poll()
+        if len(self.changes) == 0:
+            pixelBuffer = None
+        else:
+            pixelBuffer = self.changes.popleft()
+
         while pixelBuffer is not None and not pixelBuffer.hasRealChange():
             pass
 
         return pixelBuffer
 
     def nextElement(self):
-        pixelBuffer = self.nextElement
+        pixelBuffer = self._nextElement
         pixelBuffer.updateLastChangeColor()
 
         return pixelBuffer

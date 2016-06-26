@@ -44,7 +44,7 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
     ''' Chip Enable (CS/SS) '''
     SCE = None
 
-    def __init__(self, din, sclk, dc, rst, cs, contrast=0x60, inverse=False):
+    def __init__(self, din, sclk, dc, rst, cs, contrast=60, inverse=False):
         """
         :param int din: Serial data input.
         :param int sclk: Input for the clock signal.
@@ -65,12 +65,15 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
 
         self.reset()
         self.init(contrast, inverse)
+
         self.redraw()
+        print("redrou")
+        print("Pronto")
 
     @privatemethod
     def reset(self):
         self.RST.off()
-        sleep(1)
+        #sleep(1)
         self.RST.on()
 
     @privatemethod
@@ -129,6 +132,7 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
     def redraw(self):
         changes = self.DDRAM.changes
         while len(changes) != 0:
+            print(len(changes))
             bank = changes.popleft()
             self.setCursorY(bank.y)
             self.setCursorX(bank.x)
@@ -136,19 +140,19 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
             self.sendData(bank)
 
     @privatemethod
-    def sendData(self, bankData):
+    def sendData(self, bank):
         """
-        :param PCB8544DDRamBank bankData
+        :param PCB8544DDRamBank bank
         """
         self.DC.on()
 
         self.SCE.off()
-        self.writeData(bankData)
+        self.writeData(bank)
         self.SCE.on()
 
     @privatemethod
-    def writeData(self, bankData):
-        iterator = bankData.msbIterator()
+    def writeData(self, bank):
+        iterator = bank.msbIterator()
         while iterator.hasNext():
             color = iterator.nextElement()
             if color == Color.BLACK:
@@ -158,7 +162,7 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
 
             self.toggleClock()
 
-        bankData.setChanged(False)
+        bank.setChanged(False)
 
     @privatemethod
     def setCursorX(self, x):

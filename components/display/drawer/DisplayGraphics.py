@@ -66,8 +66,11 @@ class DisplayGraphics(object):
                 )
 
         print("Drawing")
-        for pixel in self.displayBuffer:
-            print("asd")
+        iterator = self.displayBuffer.iterator
+
+        while iterator.hasNext():
+            pixel = iterator.nextElement()
+            print(pixel)
             self.display.setPixel(
                 pixel.x,
                 pixel.y,

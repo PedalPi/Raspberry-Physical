@@ -39,20 +39,21 @@ class PCB8544DDRamBank(object):
     def msbIterator(self):
         return MsbIterator(self)
 
-    class MsbIterator:
-        PCB8544DisplayDDramBank = None
-        count = None
 
-        def __init__(self, PCB8544DisplayDDramBank):
-            """
-            :param PCB8544DDRamBank PCB8544DisplayDDramBank
-            """
-            self.PCB8544DisplayDDramBank = PCB8544DisplayDDramBank
-            self.count = 7
+class MsbIterator:
+    PCB8544DisplayDDramBank = None
+    count = None
 
-        def next(self):
-            self.count -= 1
-            return self.PCB8544DisplayDDramBank.getPixel(self.count)
+    def __init__(self, PCB8544DisplayDDramBank):
+        """
+        :param PCB8544DDRamBank PCB8544DisplayDDramBank
+        """
+        self.PCB8544DisplayDDramBank = PCB8544DisplayDDramBank
+        self.count = 7
 
-        def hasNext(self):
-            return self.count >= 0
+    def next(self):
+        self.count -= 1
+        return self.PCB8544DisplayDDramBank.getPixel(self.count)
+
+    def hasNext(self):
+        return self.count >= 0

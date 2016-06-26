@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
-from util.privatemethod import privatemethod
-
-from MonochomaticDisplay import MonochomaticDisplay
-from impl.pcd8544.PCB8544DisplayDataRam import PCB8544DisplayDataRam, DisplayDataRamSize
-from util.Color import Color
+from time import sleep
 
 from gpiozero import DigitalOutputDevice
-from time import sleep
+
+from util.privatemethod import privatemethod
+from util.Color import Color
+from util.DataTransmitionUtil import BitOrderFirst, DataTransmitionUtil
+
+from MonochomaticDisplay import MonochomaticDisplay
+from impl.pcd8544.PCB8544DisplayDataRam import PCB8544DisplayDataRam
+from impl.pcd8544.PCD8544Constants import DisplaySize, SysCommand, Setting
 
 
 class PCD8544DisplayComponent(MonochomaticDisplay):
@@ -78,19 +81,19 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
         self.sendCommand(
             SysCommand.DISPLAY |
             Setting.DISPLAY_D |
-            Setting.DISPLAY_E.cmd() * (1 if inverse else 0)
+            Setting.DISPLAY_E * (1 if inverse else 0)
         )
 
     @privatemethod
     def sendCommand(self, data):
-        self.DC.low()
+        self.DC.off()
 
-        self.SCE.low()
-        self.writeData(data)
-        self.SCE.high()
+        self.SCE.off()
+        self.writeDataCommand(data)
+        self.SCE.on()
 
     @privatemethod
-    def writeData(self, data):
+    def writeDataCommand(self, data):
         DataTransmitionUtil.shiftOut(
             data,
             self.DIN,
@@ -100,13 +103,13 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
 
     @privatemethod
     def toggleClock(self):
-        self.SCLK.high()
+        self.SCLK.on()
         # The pin changes usign wiring pi are 20ns?
         # The pi4j in Snapshot 1.1.0 are 1MHz ~ 1 microssecond in Raspberry 2      http://www.savagehomeautomation.com/projects/raspberry-pi-with-java-programming-the-internet-of-things-io.html#follow_up_pi4j
         # Its necessary only 10ns    Pag 22 - https://www.sparkfun.com/datasheets/LCD/Monochrome/Nokia5110.pdf
         # Not discoment :D
         #Gpio.delayMicroseconds(CLOCK_TIME_DELAY);
-        self.SCLK.low()
+        self.SCLK.off()
 
     @privatemethod
     def setContrast(self, value):
@@ -121,11 +124,11 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
         return self.DDRAM.getPixel(x, y)
 
     def redraw(self):
-        changes = self.DDRAM.getChanges()
-        while not changes.isEmpty():
-            bank = changes.remove()
-            self.setCursorY(bank.y())
-            self.setCursorX(bank.x())
+        changes = self.DDRAM.changes
+        while len(changes) != 0:
+            bank = changes.popleft()
+            self.setCursorY(bank.y)
+            self.setCursorX(bank.x)
 
             self.sendData(bank)
 
@@ -134,15 +137,16 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
         """
         :param PCB8544DDRamBank bankData
         """
-        self.DC.high()
+        self.DC.on()
 
-        self.SCE.low()
+        self.SCE.off()
         self.writeData(bankData)
-        self.SCE.high()
+        self.SCE.on()
 
     @privatemethod
-    def writeData(self, bank):
-        #Iterator<Color> iterator = bank.msbIterator()
+    def writeData(self, bankData):
+        #print(bankData)
+        #Iterator<Color> iterator = bankData.msbIterator()
         #while iterator.hasNext():
         #    color = iterator.next()
         #    self.DIN.setState(color == Color.BLACK)
@@ -154,11 +158,11 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
 
     @privatemethod
     def setCursorX(self, x):
-        self.sendCommand(SysCommand.XADDR, x)
+        self.sendCommand(SysCommand.XADDR | x)
 
     @privatemethod
     def setCursorY(self, y):
-        self.sendCommand(SysCommand.YADDR, y)
+        self.sendCommand(SysCommand.YADDR | y)
 
     def clear(self):
         self.DDRAM.clear()

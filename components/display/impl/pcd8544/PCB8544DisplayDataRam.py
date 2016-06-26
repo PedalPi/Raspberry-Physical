@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from enum import Enum
 from util.privatemethod import privatemethod
 from collections import deque
 
@@ -66,7 +65,7 @@ class PCB8544DisplayDataRam(object):
         :param int x
         :param int y
         """
-        return dataBuffer[x][y/8]
+        return self.dataBuffer[x][y/8]
 
     def getPixel(self, x, y):
         """
@@ -74,7 +73,7 @@ class PCB8544DisplayDataRam(object):
         :param int y
         """
         if not self.isPositionExists(x, y):
-            raise IndexException("Position ("+x+", "+y+") don't exists")
+            raise IndexError("Position (" + str(x) + ", " + str(y) + ") don't exists")
 
         return self.getBank(x, y).getPixel(y)
 
@@ -87,6 +86,6 @@ class PCB8544DisplayDataRam(object):
         return not notExists
 
     def clear(self):
-        for x in range(PCD8544Constants.DisplaySize.WIDTH):
-            for y in range(PCD8544Constants.DisplaySize.HEIGHT):
-                self.setPixel(x, y, initialColor)
+        for x in range(DisplaySize.WIDTH):
+            for y in range(DisplaySize.HEIGHT):
+                self.setPixel(x, y, self.initialColor)

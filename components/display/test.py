@@ -76,11 +76,11 @@ print("Test: Draw image.\n")
 
 print("Test: Draw many lines.\n")
 for i in range(0, 84, 4):
-    graphics.canvas.draw_line(0, 0, i, 47)
+    graphics.canvas.create_line(0, 0, i, 47)
     graphics.dispose()
 
 for i in range(0, 48, 4):
-    graphics.draw_line(0, 0, 83, i)
+    graphics.canvas.create_line(0, 0, 83, i)
     graphics.dispose()
 
 graphics.clear()

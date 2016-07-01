@@ -16,10 +16,15 @@ class ImageUtils:
 
                 if len(ids) > 0:
                     index = ids[-1]
-                    colors[x][y] = colors.append(canvas.itemcget(index, "fill"))
+                    colors[x][y] = canvas.itemcget(index, "fill")
+                    if colors[x][y] is None:
+                        colors[x][y] = Color.WHITE
+                        print("ImageUtils.getPixelsOf NONE INDEVIDO")
+                    else:
+                        colors[x][y] = Color.BLACK
                 else:
                     colors[x][y] = Color.WHITE
-                print(str(x), str(y), "-", colors[x][y])
+                print(str(x), str(y), "-", colors[x][y], end = "")
 
         return colors
         #canvas.pack(fill=BOTH, expand=1)

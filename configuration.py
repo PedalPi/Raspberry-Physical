@@ -3,6 +3,10 @@ from components import PatchButton
 
 
 class Configuration(object):
+    """
+    Configure the pins based in
+    https://pinout.xyz/ pinout number (because GPIOZero)
+    """
 
     def __init__(self):
         # Display

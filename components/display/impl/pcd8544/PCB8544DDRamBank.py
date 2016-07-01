@@ -1,6 +1,6 @@
 
 
-class PCB8544DDRamBank(self):
+class PCB8544DDRamBank(object):
     '''
     Display Data Ram Bank abstraction
     See Pcd8544 datasheet for more information.
@@ -14,7 +14,7 @@ class PCB8544DDRamBank(self):
         self.x = x
         self.y = y
 
-        self.changed = false
+        self.changed = False
         self.colors = [initialColor] * 8
 
     def setPixel(self, y, color):
@@ -24,43 +24,36 @@ class PCB8544DDRamBank(self):
         self.colors[y] = color
 
     def getPixel(self, y):
-        return colors[y]
+        return self.colors[y]
 
     def setChanged(self, changed):
         self.changed = changed
 
     def hasChanged(self):
-        return this.changed;
+        return self.changed
 
-    /**
-     * @deprecated It's not necessary
-     */
-    @Deprecated
-    public Iterator<Color> lsbIterator() {
-        return null;
-    }
-    
-    public Iterator<Color> msbIterator() {
-        return new MsbIterator(this);
-    }
+    def lsbIterator(self):
+        """ @Deprecated """
+        return None
 
-    private static class MsbIterator implements Iterator<Color> {
-        private PCB8544DDRamBank PCB8544DisplayDDramBank;
-        private int count;
+    def msbIterator(self):
+        return MsbIterator(self)
 
-        public MsbIterator(PCB8544DDRamBank PCB8544DisplayDDramBank) {
-            this.PCB8544DisplayDDramBank = PCB8544DisplayDDramBank;
-            this.count = 7;
-        }
 
-        @Override
-        public Color next() {
-            return PCB8544DisplayDDramBank.getPixel(count--);
-        }
+class MsbIterator:
+    PCB8544DisplayDDramBank = None
+    count = None
 
-        @Override
-        public boolean hasNext() {
-            return count >= 0;
-        }
-    }
-}
+    def __init__(self, PCB8544DisplayDDramBank):
+        """
+        :param PCB8544DDRamBank PCB8544DisplayDDramBank
+        """
+        self.PCB8544DisplayDDramBank = PCB8544DisplayDDramBank
+        self.count = 7
+
+    def nextElement(self):
+        self.count -= 1
+        return self.PCB8544DisplayDDramBank.getPixel(self.count)
+
+    def hasNext(self):
+        return self.count >= 0

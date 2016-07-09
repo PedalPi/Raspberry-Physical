@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .AbstractConfigurationController import AbstractConfigurationController
+from physical.presenter.AbstractConfigurationController import AbstractConfigurationController
 
 
 class EffectsController(AbstractConfigurationController):
@@ -31,7 +31,7 @@ class EffectsController(AbstractConfigurationController):
         current = self.physical.currentActions
         current.toggleEffectStatus(self.effectFocused)
 
-    @param
+    @property
     def effects(self):
         return self.patch['effects']
 

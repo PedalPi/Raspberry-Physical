@@ -1,35 +1,54 @@
 # -*- coding: utf-8 -*-
 from configurations import Configurations
 
+from component.Components import Components
+
+#from presenter.DisplayController import DisplayController
+from mvc.effects.EffectsController import EffectsController
+from mvc.patches.PatchesController import PatchesController
+
 
 class Physical(object):
+    app = None
     config = None
+    components = None
+    controllers = None
 
-    def __init__(self):
-        self.app = Application()
+    def __init__(self, application):
+        self.app = application
         self.config = Configurations()
 
-        self.initControllers()
+        self.components = self.initComponents(self.config)
+        self.controllers = self.initControllers()
+
+        controller = self.controllers[PatchesController]
+
         self.initActions()
-        self.initComponents()
+        self.initComponents(self.components)
 
         self.patchesController.updateDisplay()
 
-    def initControllers(self):
-        self.displayController = DisplayController(self.config.display)
+    def initComponents(self, configurations):
+        components = dict()
 
-        self.patchesController = PatchesController(self)
-        self.effectsController = EffectsController(self, patch)
-        self.paramsController = None #ParamsController(self)
+        components[Components.DISPLAY] = configurations.display
+        components[Components.NEXT_PATCH] = configurations.nextPatchButton
+        components[Components.BEFORE_PATCH] = configurations.beforePatchButton
+        components[Components.DIGITAL_ENCODER] = configurations.digitalEncoder
 
-    def initComponents(self):
-        if self.config.display:
-            self.config.display.init()
+        return components
 
-        self.config.nextPatchButton.action = self.patchesController.nextPatch
-        self.config.beforePatchButton.action = self.patchesController.beforePatch
+    def initControllers(self, components, application):
+        actions = ActionsFacade(application)
 
-        self.effectButton.action = self.config.effectsController.toggle
+        controllers = {}
+
+        #controllers[DisplayController] = DisplayController(components, actions)
+        controllers[PatchesController] = PatchesController(components, actions)
+        controllers[EffectsController] = EffectsController(components, actions)
+        #controllers[ParamsController] = ParamsController(self)
+
+        return controllers
 
     def setController(self, controller):
         manager = self.config.manager

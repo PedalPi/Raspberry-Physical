@@ -20,9 +20,14 @@ class PatchesView(View):
         self.digitalEncoder = components[Components.DIGITAL_ENCODER]
 
     def initComponentsActions(self):
+        self.effect = ?
         self.nextPatch.action = self.controller.toNextPatch
         self.beforePatch.action = self.controller.toBeforePatch
 
+        #self.digitalEncoder. ... = self.controller.toNextEffect
+        #self.digitalEncoder. ... = self.controller.toBeforeEffect
+
     def showPatch(self, patch):
+        print(patch)
         #self.display
         pass

@@ -6,7 +6,7 @@ class EffectComponent(object):
     __effect = None
 
     def __init__(self, pinButton, pinLed, twoState=True):
-        self.button = Button(pinButton)
+        self.button = Button(pinButton, pull_up=False)
         self.led = LED(pinLed)
         self.twoState = twoState
 

@@ -8,7 +8,7 @@ from component.DigitalEncoder import DigitalEncoder
 class Configurations(object):
     """
     Configure the pins based in
-    https://pinout.xyz/ pinout number (because GPIOZero)
+    https://pinout.xyz/ pinout number
     """
 
     def __init__(self):
@@ -16,11 +16,11 @@ class Configurations(object):
         self.display = None#PCD8544DisplayComponent(1, 2, 3, 4, 5)
 
         # Patch
-        self.nextPatchButton = PatchButton(21)
-        self.beforePatchButton = PatchButton(20)
+        self.nextPatchButton = PatchButton(15)
+        self.beforePatchButton = PatchButton(18)
 
         # Effect
-        self.effectButton = EffectComponent(Button(4), LED(5))
+        self.effectButton = EffectComponent(pinButton=26, pinLed=21)
 
         # DigitalEncoder
-        self.digitalEncoder = DigitalEncoder(1, 2, 3)
+        self.digitalEncoder = None#DigitalEncoder(1, 2, 3)

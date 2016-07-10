@@ -49,3 +49,9 @@ class PatchesController(Controller):
             self.indexEffectFocused = self.currentPatch.effects.size-1
 
         self.view.showEffect(self.currentEffect)
+
+    def toEffectsController(self):
+        from mvc.effects.EffectsController import EffectsController
+
+        controller = self.controllers[EffectsController]
+        controller.init(self.currentEffect)

@@ -31,8 +31,10 @@ class PatchesView(View):
         self.nextPatch.action = self.controller.toNextPatch
         self.beforePatch.action = self.controller.toBeforePatch
 
-        #self.digitalEncoder. ... = self.controller.toNextEffect
-        #self.digitalEncoder. ... = self.controller.toBeforeEffect
+        self.digitalEncoder.minusAction = self.controller.toNextEffect
+        self.digitalEncoder.plusAction = self.controller.toBeforeEffect
+
+        self.digitalEncoder.selectAction = self.controller.toEffectsController
 
     def showPatch(self, patch):
         print("Patch:", patch['name'])
@@ -40,4 +42,4 @@ class PatchesView(View):
 
     def showEffect(self, effect):
         print("Effect:", effect['uri'])
-        # self.display
+        #self.display

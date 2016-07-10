@@ -23,4 +23,4 @@ class Configurations(object):
         self.effectButton = EffectComponent(pinButton=26, pinLed=21)
 
         # DigitalEncoder
-        self.digitalEncoder = None#DigitalEncoder(1, 2, 3)
+        self.digitalEncoder = DigitalEncoder(None, None, None)

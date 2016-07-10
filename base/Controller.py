@@ -3,11 +3,13 @@ from abc import ABCMeta, abstractmethod
 
 
 class Controller(metaclass=ABCMeta):
-    view = None
+    controllers = None
     components = None
     actions = None
+    view = None
 
-    def __init__(self, components, actions, view):
+    def __init__(self, controllers, components, actions, view):
+        self.controllers = controllers
         self.components = components
         self.actions = actions
         self.view = view()
@@ -22,6 +24,3 @@ class Controller(metaclass=ABCMeta):
         view.init(self)
         view.initComponents(self.components)
         view.initComponentsActions()
-
-    def toController(self, controller, params):
-        pass

@@ -5,7 +5,7 @@ from action.ActionsFacade import ActionsFacade
 from component.Components import Components
 
 #from presenter.DisplayController import DisplayController
-from mvc.effects.EffectsController import EffectsController
+from mvc.params.ParamsController import ParamsController
 from mvc.patches.PatchesController import PatchesController
 
 
@@ -42,9 +42,8 @@ class Physical(object):
     def initControllers(self, components, actions):
         controllers = {}
 
-        #controllers[DisplayController] = DisplayController(components, actions)
-        controllers[PatchesController] = PatchesController(components, actions)
-        controllers[EffectsController] = EffectsController(components, actions)
+        controllers[PatchesController] = PatchesController(controllers, components, actions)
+        controllers[ParamsController] = ParamsController(controllers, components, actions)
         #controllers[ParamsController] = ParamsController(self)
 
         return controllers

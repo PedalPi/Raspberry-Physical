@@ -7,8 +7,8 @@ class PatchesController(Controller):
     indexEffectFocused = 0
     currentPatch = None
 
-    def __init__(self, components, actions):
-        super().__init__(components, actions, PatchesView)
+    def __init__(self, controllers, components, actions):
+        super().__init__(controllers, components, actions, PatchesView)
 
     def init(self, currentPatch):
         self.currentPatch = currentPatch
@@ -37,7 +37,7 @@ class PatchesController(Controller):
 
     def toNextEffect(self):
         self.indexEffectFocused += 1
-        if self.indexEffectFocused == self.currentPatch.effects.size:
+        if self.indexEffectFocused == len(self.currentPatch.effects):
             self.indexEffectFocused = 0
 
         self.view.showEffect(self.currentEffect)
@@ -46,12 +46,12 @@ class PatchesController(Controller):
         self.indexEffectFocused -= 1
 
         if self.indexEffectFocused == -1:
-            self.indexEffectFocused = self.currentPatch.effects.size-1
+            self.indexEffectFocused = len(self.currentPatch.effects) - 1
 
         self.view.showEffect(self.currentEffect)
 
     def toEffectsController(self):
-        from mvc.effects.EffectsController import EffectsController
+        from mvc.params.ParamsController import ParamsController
 
-        controller = self.controllers[EffectsController]
+        controller = self.controllers[ParamsController]
         controller.init(self.currentEffect)

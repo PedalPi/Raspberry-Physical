@@ -13,6 +13,7 @@ class PatchesController(Controller):
     def init(self, currentPatch):
         self.currentPatch = currentPatch
         self.view.showPatch(currentPatch)
+        self.view.showEffect(self.currentEffect)
 
     def toNextPatch(self):
         nextPatch = self.actions.toNextPatch()
@@ -23,8 +24,12 @@ class PatchesController(Controller):
         self.init(beforePatch)
 
     def toggleStatusEffect(self):
-        beforePatch = self.actions.toBeforePatch()
-        self.init(beforePatch)
+        effect = self.currentEffect
+        print("Effect:", effect['uri'])
+        print(" - Index:", self.indexEffectFocused)
+        print(" - Old status:", effect.status)
+        self.actions.toggleStatusEffect(effect)
+        print(" - New status:", effect.status)
 
     @property
     def currentEffect(self):

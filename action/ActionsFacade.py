@@ -1,4 +1,5 @@
 from application.controller.CurrentController import CurrentController
+from application.controller.EffectController import EffectController
 
 
 class ActionsFacade(object):
@@ -22,3 +23,7 @@ class ActionsFacade(object):
 
         controller.toBeforePatch()
         return controller.currentPatch
+
+    def toggleStatusEffect(self, effect):
+        controller = self.app.controller(EffectController)
+        controller.toggleStatus(effect)

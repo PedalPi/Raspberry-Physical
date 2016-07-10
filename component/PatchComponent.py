@@ -2,11 +2,11 @@
 from gpiozero import Button
 
 
-class PatchButton(object):
+class PatchComponent(object):
     button = None
 
     def __init__(self, pin):
-        self.button = Button(pin)
+        self.button = Button(pin, pull_up=False)
 
     @property
     def action(self):

@@ -6,6 +6,12 @@ from component.Components import Components
 class PatchesView(View):
     controller = None
 
+    display = None
+    nextPatch = None
+    beforePatch = None
+    effect = None
+    digitalEncoder = None
+
     def init(self, controller):
         self.controller = controller
 
@@ -20,7 +26,8 @@ class PatchesView(View):
         self.digitalEncoder = components[Components.DIGITAL_ENCODER]
 
     def initComponentsActions(self):
-        self.effect = ?
+        self.effect.action = self.controller.toggleStatusEffect
+
         self.nextPatch.action = self.controller.toNextPatch
         self.beforePatch.action = self.controller.toBeforePatch
 
@@ -28,6 +35,9 @@ class PatchesView(View):
         #self.digitalEncoder. ... = self.controller.toBeforeEffect
 
     def showPatch(self, patch):
-        print(patch)
+        print("Patch:", patch['name'])
         #self.display
-        pass
+
+    def showEffect(self, effect):
+        print("Effect:", effect['uri'])
+        # self.display

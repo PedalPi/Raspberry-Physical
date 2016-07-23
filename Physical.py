@@ -44,7 +44,6 @@ class Physical(object):
 
         controllers[PatchesController] = PatchesController(controllers, components, actions)
         controllers[ParamsController] = ParamsController(controllers, components, actions)
-        #controllers[ParamsController] = ParamsController(self)
 
         return controllers
 

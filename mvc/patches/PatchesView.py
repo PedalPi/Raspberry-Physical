@@ -42,4 +42,4 @@ class PatchesView(View):
 
     def showEffect(self, effect):
         print("Effect:", effect['uri'])
-        #self.display
+        self.display.showEffect(effect)

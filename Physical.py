@@ -4,7 +4,6 @@ from configurations import Configurations
 from action.ActionsFacade import ActionsFacade
 from component.Components import Components
 
-#from presenter.DisplayController import DisplayController
 from mvc.params.ParamsController import ParamsController
 from mvc.patches.PatchesController import PatchesController
 

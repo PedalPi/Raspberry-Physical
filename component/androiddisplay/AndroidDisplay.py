@@ -1,4 +1,4 @@
-from component.display import Display
+from component.Display import Display
 from component.androiddisplay.DisplayServer import DisplayServer
 
 

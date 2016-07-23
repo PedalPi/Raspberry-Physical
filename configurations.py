@@ -14,7 +14,7 @@ class Configurations(object):
 
     def __init__(self):
         # Display
-        #self.display = None#PCD8544DisplayComponent(1, 2, 3, 4, 5)
+        self.display = None#PCD8544DisplayComponent(1, 2, 3, 4, 5)
         self.display = AndroidDisplay('localhost', 10000)
 
         # Patch

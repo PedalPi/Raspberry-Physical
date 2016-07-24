@@ -12,8 +12,11 @@ class PatchesController(Controller):
 
     def init(self, currentPatch):
         self.currentPatch = currentPatch
-        self.view.showPatch(currentPatch)
         self.view.showEffect(self.currentEffect)
+
+        print('=' * 25)
+        print("Patch:", currentPatch['name'])
+        print('=' * 25)
 
     def toNextPatch(self):
         nextPatch = self.actions.toNextPatch()
@@ -51,10 +54,8 @@ class PatchesController(Controller):
         self.view.showEffect(self.currentEffect)
 
     def toEffectsController(self):
-        print("I can't now! XD")
-        '''
         from mvc.params.ParamsController import ParamsController
 
         controller = self.controllers[ParamsController]
+        controller.start()
         controller.init(self.currentEffect)
-        '''

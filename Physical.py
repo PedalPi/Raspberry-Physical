@@ -25,6 +25,7 @@ class Physical(object):
         self.controllers = self.initControllers(self.components, self.actions)
 
         controller = self.controllers[PatchesController]
+        controller.start()
         controller.init(self.actions.currentPatch)
 
     def initComponents(self, configurations):
@@ -45,10 +46,3 @@ class Physical(object):
         controllers[ParamsController] = ParamsController(controllers, components, actions)
 
         return controllers
-
-    def setController(self, controller):
-        manager = self.config.manager
-
-        manager.onNext = controller.onNext
-        manager.onBefore = controller.onBefore
-        manager.onClick = controller.onClick

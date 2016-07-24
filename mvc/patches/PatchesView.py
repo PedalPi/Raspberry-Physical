@@ -40,10 +40,5 @@ class PatchesView(View):
         else:
             self.controller.toBeforeEffect()
 
-    def showPatch(self, patch):
-        print("Patch:", patch['name'])
-        #self.display
-
     def showEffect(self, effect):
-        print("Effect:", effect.index, "-", effect['uri'])
         self.display.showEffect(effect)

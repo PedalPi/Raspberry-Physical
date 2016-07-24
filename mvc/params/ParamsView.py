@@ -7,25 +7,39 @@ class ParamsView(View):
     controller = None
 
     display = None
-    digitalEncoder = None
+    nextPatch = None
+    beforePatch = None
+    effect = None
+    rotaryEncoder = None
 
     def init(self, controller):
+        print(controller)
         self.controller = controller
 
     def initComponents(self, components):
         self.display = components[Components.DISPLAY]
-        self.digitalEncoder = components[Components.DIGITAL_ENCODER]
+
+        self.nextPatch = components[Components.NEXT_PATCH]
+        self.beforePatch = components[Components.BEFORE_PATCH]
+
+        self.effect = components[Components.EFFECT]
+
+        self.rotaryEncoder = components[Components.DIGITAL_ENCODER]
 
     def initComponentsActions(self):
-        self.digitalEncoder.minusAction = self.controller.addValue
-        self.digitalEncoder.plusAction = self.controller.minusValue
+        self.effect.action = self.controller.returnToParamsController
 
-        self.digitalEncoder.selectAction = self.controller.toNextParam
+        self.nextPatch.action = self.controller.returnToParamsController
+        self.beforePatch.action = self.controller.returnToParamsController
 
-    def showEffect(self, effect):
-        print("Effect:", effect['uri'])
-        #self.display
+        self.rotaryEncoder.when_selected = self.controller.toNextParam
+        self.rotaryEncoder.when_rotated = self.when_rotary_rotated
+
+    def when_rotary_rotated(self, state):
+        if state == 1:
+            self.controller.addValue()
+        else:
+            self.controller.minusValue()
 
     def showParam(self, param):
-        print("Param:", param['name'])
-        #self.display
+        self.display.showParam(param)

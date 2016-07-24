@@ -27,3 +27,8 @@ class ActionsFacade(object):
     def toggleStatusEffect(self, effect):
         controller = self.app.controller(EffectController)
         controller.toggleStatus(effect)
+
+    def setParamValue(self, param, newValue):
+        effect = param.effect
+        controller = self.app.controller(CurrentController)
+        controller.setEffectParam(effect.index, param.index, newValue)

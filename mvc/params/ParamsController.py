@@ -13,8 +13,11 @@ class ParamsController(Controller):
     def init(self, currentEffect):
         self.currentEffect = currentEffect
 
-        self.view.showEffect(currentEffect)
         self.view.showParam(self.currentParam)
+
+        print('=' * 25)
+        print("Param:", self.currentParam['name'])
+        print('=' * 25)
 
     def toNextParam(self):
         if self.indexParamFocused == len(self.params) - 1:
@@ -24,12 +27,26 @@ class ParamsController(Controller):
         self.view.showParam(self.currentParam)
 
     def addValue(self):
-        print("value is += 1")
-        self.view.showParam(self.currentParam)
+        param = self.currentParam
+
+        maximum = param['ranges']['maximum']
+        newValue = param.value + 1
+        if newValue > maximum:
+            newValue = maximum
+
+        self.actions.setParamValue(param, newValue)
+        self.view.showParam(param)
 
     def minusValue(self):
-        print("value is -= 1")
-        self.view.showParam(self.currentParam)
+        param = self.currentParam
+
+        minimum = param['ranges']['minimum']
+        newValue = param.value - 1
+        if newValue < minimum:
+            newValue = minimum
+
+        self.actions.setParamValue(param, newValue)
+        self.view.showParam(param)
 
     @property
     def params(self):
@@ -38,3 +55,10 @@ class ParamsController(Controller):
     @property
     def currentParam(self):
         return self.params[self.indexParamFocused]
+
+    def returnToParamsController(self):
+        from mvc.patches.PatchesController import PatchesController
+
+        controller = self.controllers[PatchesController]
+        controller.start()
+        controller.init(self.currentEffect.patch)

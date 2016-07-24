@@ -14,13 +14,11 @@ class Controller(metaclass=ABCMeta):
         self.actions = actions
         self.view = view()
 
-        self.initController(self.view)
-
     @abstractmethod
     def init(self):
         pass
 
-    def initController(self, view):
-        view.init(self)
-        view.initComponents(self.components)
-        view.initComponentsActions()
+    def start(self):
+        self.view.init(self)
+        self.view.initComponents(self.components)
+        self.view.initComponentsActions()

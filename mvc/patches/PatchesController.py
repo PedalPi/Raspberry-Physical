@@ -51,7 +51,10 @@ class PatchesController(Controller):
         self.view.showEffect(self.currentEffect)
 
     def toEffectsController(self):
+        print("I can't now! XD")
+        '''
         from mvc.params.ParamsController import ParamsController
 
         controller = self.controllers[ParamsController]
         controller.init(self.currentEffect)
+        '''

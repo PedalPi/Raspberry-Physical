@@ -2,7 +2,7 @@
 from component.PatchComponent import PatchComponent
 from component.PCD8544DisplayComponent import PCD8544DisplayComponent
 from component.EffectComponent import EffectComponent
-from component.DigitalEncoder import DigitalEncoder
+from component.RotaryEncoder import RotaryEncoderWithButton
 from component.androiddisplay.AndroidDisplay import AndroidDisplay
 
 
@@ -25,4 +25,4 @@ class Configurations(object):
         self.effectButton = EffectComponent(pinButton=26, pinLed=21)
 
         # DigitalEncoder
-        self.digitalEncoder = DigitalEncoder(None, None, None)
+        self.digitalEncoder = RotaryEncoderWithButton(pinMinus=19, pinPlus=13, selectPin=6, pullUp=True)

@@ -34,7 +34,7 @@ class ParamsController(Controller):
         if newValue > maximum:
             newValue = maximum
 
-        self.actions.setParamValue(param, newValue)
+        self.actions.set_param_value(param, newValue)
         self.view.showParam(param)
 
     def minusValue(self):
@@ -45,7 +45,7 @@ class ParamsController(Controller):
         if newValue < minimum:
             newValue = minimum
 
-        self.actions.setParamValue(param, newValue)
+        self.actions.set_param_value(param, newValue)
         self.view.showParam(param)
 
     @property

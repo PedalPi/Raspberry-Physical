@@ -24,7 +24,7 @@ class ImageUtils:
                         colors[x][y] = Color.BLACK
                 else:
                     colors[x][y] = Color.WHITE
-                print(str(x), str(y), "-", colors[x][y], end = "")
+                #print(str(x), str(y), "-", colors[x][y], end = "")
 
         return colors
         #canvas.pack(fill=BOTH, expand=1)

@@ -1,22 +1,24 @@
 # -*- coding: utf-8 -*-
-from time import sleep
+import time
 
-from gpiozero import DigitalOutputDevice
+from gpiozero import DigitalOutputDevice, PWMOutputDevice
+from gpiozero import SPIDevice
 
-from util.privatemethod import privatemethod
 from util.Color import Color
-from util.DataTransmitionUtil import BitOrderFirst, DataTransmitionUtil
 
 from MonochomaticDisplay import MonochomaticDisplay
 from impl.pcd8544.PCB8544DisplayDataRam import PCB8544DisplayDataRam
 from impl.pcd8544.PCD8544Constants import DisplaySize, SysCommand, Setting
 
+from util.DataTransmitionUtil import BitOrderFirst, DataTransmitionUtil
 
-class PCD8544DisplayComponent(MonochomaticDisplay):
+
+class PCD8544(MonochomaticDisplay):
+#class PCD8544(SPIDevice):
     '''
     PCD8544 display implementation.
 
-    This implementation uses software shiftOut implementation
+    This implementation uses software shiftOut implementation?
 
     @author SrMouraSilva
     Based in 2013 Giacomo Trudu - wicker25[at]gmail[dot]com
@@ -33,28 +35,31 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
 
     DDRAM = None
 
-    ''' Serial data input '''
-    DIN = None
-    ''' Input for the clock signal '''
-    SCLK = None
-    ''' Data/Command mode select '''
+    """ Data/Command mode select """
     DC = None
-    ''' External rst input '''
+    """ External reset input """
     RST = None
-    ''' Chip Enable (CS/SS) '''
-    SCE = None
 
     def __init__(self, din, sclk, dc, rst, cs, contrast=60, inverse=False):
         """
-        :param int din: Serial data input.
-        :param int sclk: Input for the clock signal.
-        :param int dc: Data/Command mode select.
-        :param int rst: External rst input.
-        :param int cs: Chip Enable (CS/SS)
+        https://www.raspberrypi.org/documentation/hardware/raspberrypi/spi/README.md
+
+        The SPI master driver is disabled by default on Raspbian.
+        To enable it, use raspi-config, or ensure the line
+        dtparam=spi=on isn't commented out in /boot/config.txt, and reboot.
+
+        :param int din: Serial data input
+        :param int sclk: Serial clock input (clk)
+        :param int dc: Data/Command mode select (d/c)
+        :param int rst: External reset input (res)
+        :param int cs: Chip Enable (CS/SS, sce)
 
         :param contrast
         :param inverse
         """
+        #super(PCD8544, self).__init__(clock_pin=sclk, mosi_pin=din, miso_pin=None, select_pin=cs)
+        print("Inicializando")
+
         self.DDRAM = PCB8544DisplayDataRam(self, Color.WHITE)
 
         self.DIN = DigitalOutputDevice(din)
@@ -63,40 +68,36 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
         self.RST = DigitalOutputDevice(rst)
         self.SCE = DigitalOutputDevice(cs)
 
-        self.reset()
-        self.init(contrast, inverse)
+        self._reset()
+        self._init(contrast, inverse)
 
         self.redraw()
-        print("redrou")
-        print("Pronto")
+        print("Inicializado")
 
-    @privatemethod
-    def reset(self):
+    def _reset(self):
         self.RST.off()
-        #sleep(1)
+        time.sleep(0.100)
         self.RST.on()
 
-    @privatemethod
-    def init(self, contrast, inverse):
-        self.sendCommand(SysCommand.FUNC | Setting.FUNC_H)
-        self.sendCommand(SysCommand.BIAS | 0x04)
-        self.sendCommand(SysCommand.VOP | contrast & 0x7f)
-        self.sendCommand(SysCommand.FUNC)
-        self.sendCommand(
+    def _init(self, contrast, inverse):
+        self._sendCommand(SysCommand.FUNC | Setting.FUNC_H)
+        self._sendCommand(SysCommand.BIAS | 0x04)
+        self._sendCommand(SysCommand.VOP | contrast & 0x7f)
+        self._sendCommand(SysCommand.FUNC)
+        self._sendCommand(
             SysCommand.DISPLAY |
             Setting.DISPLAY_D |
             Setting.DISPLAY_E * (1 if inverse else 0)
         )
 
-    @privatemethod
-    def sendCommand(self, data):
+    def _sendCommand(self, data):
         self.DC.off()
 
+        #self._spi.write([data])
         self.SCE.off()
         self.writeDataCommand(data)
         self.SCE.on()
 
-    @privatemethod
     def writeDataCommand(self, data):
         DataTransmitionUtil.shiftOut(
             data,
@@ -105,8 +106,7 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
             BitOrderFirst.MSB
         )
 
-    @privatemethod
-    def toggleClock(self):
+    def _toggleClock(self):
         self.SCLK.on()
         # The pin changes usign wiring pi are 20ns?
         # The pi4j in Snapshot 1.1.0 are 1MHz ~ 1 microssecond in Raspberry 2
@@ -117,11 +117,10 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
         #Gpio.delayMicroseconds(CLOCK_TIME_DELAY);
         self.SCLK.off()
 
-    @privatemethod
     def setContrast(self, value):
-        self.sendCommand(SysCommand.FUNC, Setting.FUNC_H)
-        self.sendCommand(SysCommand.VOP, value & 0x7f)
-        self.sendCommand(SysCommand.FUNC)
+        self._sendCommand(SysCommand.FUNC, Setting.FUNC_H)
+        self._sendCommand(SysCommand.VOP, value & 0x7f)
+        self._sendCommand(SysCommand.FUNC)
 
     def setPixel(self, x, y, color):
         self.DDRAM.setPixel(x, y, color)
@@ -130,28 +129,34 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
         return self.DDRAM.getPixel(x, y)
 
     def redraw(self):
+        print("Realizando redraw")
         changes = self.DDRAM.changes
-        while len(changes) != 0:
-            print(len(changes))
-            bank = changes.popleft()
-            self.setCursorY(bank.y)
-            self.setCursorX(bank.x)
+        print("Total de mudanças: ", len(changes))
 
-            self.sendData(bank)
+        import time
+        start_time = time.time()
 
-    @privatemethod
-    def sendData(self, bank):
-        """
-        :param PCB8544DDRamBank bank
-        """
         self.DC.on()
 
         self.SCE.off()
-        self.writeData(bank)
-        self.SCE.on()
+        while changes:
+            bank = changes.popleft()
+            self._setCursorY(bank.y)
+            self._setCursorX(bank.x)
 
-    @privatemethod
-    def writeData(self, bank):
+            self._sendData(bank)
+
+        self.SCE.on()
+        print("--- %s seconds ---" % (time.time() - start_time))
+
+    def _sendData(self, bank):
+        """
+        :param PCB8544DDRamBank bank
+        """
+        #self._spi.write([bank.mbs_byte]
+        self._writeData(bank)
+
+    def _writeData(self, bank):
         iterator = bank.msbIterator()
         while iterator.hasNext():
             color = iterator.nextElement()
@@ -160,23 +165,21 @@ class PCD8544DisplayComponent(MonochomaticDisplay):
             else:
                 self.DIN.off()
 
-            self.toggleClock()
+            self._toggleClock()
 
         bank.setChanged(False)
 
-    @privatemethod
-    def setCursorX(self, x):
-        self.sendCommand(SysCommand.XADDR | x)
+    def _setCursorX(self, x):
+        self._sendCommand(SysCommand.XADDR | x)
 
-    @privatemethod
-    def setCursorY(self, y):
-        self.sendCommand(SysCommand.YADDR | y)
+    def _setCursorY(self, y):
+        self._sendCommand(SysCommand.YADDR | y)
 
     def clear(self):
         self.DDRAM.clear()
 
-        self.setCursorX(0)
-        self.setCursorY(0)
+        self._setCursorX(0)
+        self._setCursorY(0)
 
     @property
     def width(self):

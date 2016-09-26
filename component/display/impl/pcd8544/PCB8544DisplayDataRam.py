@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from util.privatemethod import privatemethod
 from collections import deque
 
 from MonochomaticDisplay import MonochomaticDisplay
@@ -42,9 +41,10 @@ class PCB8544DisplayDataRam(object):
                 self.changes.append(self.dataBuffer[x][y])
 
     def setPixel(self, x, y, color):
-        if not self.isPositionExists(x, y):
-            #raise IndexException("Position ("+x+", "+y+") don't exists")
-            return
+        if not self._isPositionExists(x, y):
+            raise IndexError("Position ("+x+", "+y+") don't exists")
+            raise IndexError("Position ("+x+", "+y+") don't exists")
+            #return
 
         if not (color == MonochomaticDisplay.DARK) and \
            not (color == MonochomaticDisplay.LIGHT):
@@ -59,7 +59,6 @@ class PCB8544DisplayDataRam(object):
         if bank.hasChanged() and not anotherChangeRegistred:
             self.changes.append(bank)
 
-    @privatemethod
     def getBank(self, x, y):
         """
         :param int x
@@ -72,13 +71,12 @@ class PCB8544DisplayDataRam(object):
         :param int x
         :param int y
         """
-        if not self.isPositionExists(x, y):
+        if not self._isPositionExists(x, y):
             raise IndexError("Position (" + str(x) + ", " + str(y) + ") don't exists")
 
         return self.getBank(x, y).getPixel(y)
 
-    @privatemethod
-    def isPositionExists(self, x, y):
+    def _isPositionExists(self, x, y):
         notExists = x < 0 \
                  or y < 0 \
                  or x >= self.display.width \

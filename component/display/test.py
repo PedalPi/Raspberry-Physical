@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #from impl.TkDisplayComponent import TkDisplayComponent
-from impl.PCD8544DisplayComponent import PCD8544DisplayComponent
+from impl.PCD8544 import PCD8544
 from drawer.DisplayGraphics import DisplayGraphics
 
 from util.Color import Color
@@ -10,14 +10,12 @@ from util.Color import Color
 def sleep(a):
     pass
 
-print("Init")
-
 # Get a display compoment
 # Implemented:
 #  - PCD8544: Nokia 3110 and 5110
 #  - Tk: For tests in pc develop
 #display = TkDisplayComponent(500, 400, True)
-display = PCD8544DisplayComponent(21, 20, 16, 26, 19)
+display = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7)
 
 
 #print("Test: Display single pixel.\n")
@@ -29,13 +27,13 @@ display = PCD8544DisplayComponent(21, 20, 16, 26, 19)
 
 
 # WARNING - DisplayGraphics ignore ALL manual changes (by display.setPixel())
-graphics = DisplayGraphics(display, Color.BLACK)
+graphics = DisplayGraphics(display, Color.WHITE)
 
 # Cleaning the display
 #print("Clear")
 #graphics.clear()
 
-sleep(5000)
+#sleep(5000)
 
 # Writting text in a (x, y) position
 #graphics.drawString("Pi4j!", 0, 20)
@@ -50,7 +48,7 @@ sleep(5000)
 #graphics.dispose()
 #graphics.clear()
 
-sleep(5000)
+#sleep(5000)
 
 # Drawing images
 print("Test: Draw image.\n")
@@ -74,7 +72,7 @@ print("Test: Draw image.\n")
 
 # Line, rectangle, circle (oval) tests
 
-print("Test: Draw many lines.\n")
+print("Test: Draw lines.\n")
 for i in range(0, 84, 4):
     graphics.canvas.create_line(0, 0, i, 47)
     graphics.dispose()
@@ -84,7 +82,7 @@ for i in range(0, 48, 4):
     graphics.dispose()
 
 graphics.clear()
-sleep(5000)
+#sleep(5000)
 
 print("Test: Draw rectangles.\n")
 for i in range(0, 48, 2):
@@ -92,7 +90,7 @@ for i in range(0, 48, 2):
     graphics.dispose()
 
 graphics.clear()
-sleep(5000)
+#sleep(5000)
 
 print("Test: Draw multiple rectangles.\n")
 for i in range(48):
@@ -102,7 +100,7 @@ for i in range(48):
     graphics.dispose()
 
 graphics.clear()
-sleep(5000)
+#sleep(5000)
 
 
 print("Test: Draw multiple circles.\n")
@@ -113,4 +111,4 @@ for i in range(0, 48, 6):
 
 
 graphics.clear()
-sleep(5000)
+#sleep(5000)

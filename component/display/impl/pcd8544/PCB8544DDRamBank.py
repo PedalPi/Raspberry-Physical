@@ -1,3 +1,4 @@
+from util.Color import Color
 
 
 class PCB8544DDRamBank(object):
@@ -39,6 +40,15 @@ class PCB8544DDRamBank(object):
     def msbIterator(self):
         return MsbIterator(self)
 
+    @property
+    def mbs_byte(self):
+        index = 0
+        value = 0
+        for self.color in self.colors:
+            value += 0 if self.colors == Color.WHITE else index**2
+            index += 1
+
+        return value
 
 class MsbIterator:
     PCB8544DisplayDDramBank = None

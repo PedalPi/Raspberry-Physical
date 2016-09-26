@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 
-from util.privatemethod import privatemethod
 from drawer.buffer.PixelBuffer import PixelBuffer
 
 
 class DisplayBuffer(object):
     """
-    DisplayBuffer its a good auto dettecter changes.
+    DisplayBuffer its a good auto detecter changes.
 
 
     Change the required pixels and - for update the
@@ -60,10 +59,12 @@ class DisplayBuffer(object):
         :param int y: Column position. 0 is first, left to right direction
         :param Color color
         """
-        pixel = self.getPixel(x, y)
+        pixel = self._getPixel(x, y)
 
         if pixel is None:
-            return  # or throws?
+            print((x, y), " pixel not exists")
+            #raise IndexError((x, y), "pixel not exists")
+            return
 
         elif pixel.color == color:
             return
@@ -71,8 +72,7 @@ class DisplayBuffer(object):
         pixel.color = color
         self.changes.append(pixel)
 
-    @privatemethod
-    def getPixel(self, x, y):
+    def _getPixel(self, x, y):
         """
         :param int x
         :param int y
@@ -112,23 +112,22 @@ class DisplayBufferIterator(object):
         """
         :param deque<PixelBuffer> changes
         """
+        print(len(changes))
         self.changes = changes
 
     def hasNext(self):
-        self._nextElement = self.findNext()
+        self._nextElement = self._findNext()
         return self._nextElement is not None
 
-    @privatemethod
-    def findNext(self):
-        if len(self.changes) == 0:
-            pixelBuffer = None
-        else:
+    def _findNext(self):
+        while self.changes:
             pixelBuffer = self.changes.popleft()
 
-        while pixelBuffer is not None and not pixelBuffer.hasRealChange():
-            pass
+            if pixelBuffer.hasRealChange():
+                print('aaaaa')
+                return pixelBuffer
 
-        return pixelBuffer
+        return None
 
     def nextElement(self):
         pixelBuffer = self._nextElement

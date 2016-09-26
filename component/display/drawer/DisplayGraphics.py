@@ -5,7 +5,6 @@
 from tkinter import Canvas
 
 from util.Color import Color
-from util.privatemethod import privatemethod
 from util.ImageUtils import ImageUtils
 
 from drawer.buffer.DisplayBuffer import DisplayBuffer
@@ -41,18 +40,16 @@ class DisplayGraphics(object):
         self.display.clear()
 
     def dispose(self):
-        self.updateDisplay()
+        self._updateDisplay()
 
-    @privatemethod
-    def updateDisplay(self):
+    def _updateDisplay(self):
         pixels = ImageUtils.getPixelsOf(self.canvas)
-        self.drawDisplay(pixels)
+        self._drawDisplay(pixels)
         self.display.redraw()
 
-    @privatemethod
-    def drawDisplay(self, pixels):
+    def _drawDisplay(self, pixels):
         """
-        :param Color[][] pixels
+        :param Color[][] pixels:
         """
         height = len(pixels)
         width = len(pixels[0])
@@ -64,13 +61,19 @@ class DisplayGraphics(object):
                     yImage,
                     pixels[yImage][xImage]
                 )
+                """
+                if pixels[yImage][xImage] == Color.WHITE:
+                    print(' ', end='')
+                else:
+                    print('.', end='')
+                """
+            #print()
 
-        print("Drawing")
+
         iterator = self.displayBuffer.iterator
 
         while iterator.hasNext():
             pixel = iterator.nextElement()
-            print(pixel)
             self.display.setPixel(
                 pixel.x,
                 pixel.y,

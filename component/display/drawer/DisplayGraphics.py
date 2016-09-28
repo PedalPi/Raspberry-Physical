@@ -21,6 +21,8 @@ class DisplayGraphics(object):
 
     displayBuffer = None
 
+    initialColor = None
+
     def __init__(self, display, initialColor):
         """
         :param Display display
@@ -28,21 +30,15 @@ class DisplayGraphics(object):
         :param ColorType type
         """
         self.display = display
-        self.canvas = Canvas(None, width=display.width, height=display.height)
-
-        self.displayBuffer = DisplayBuffer(
-            display.width,
-            display.height,
-            Color.WHITE
-        )
+        self.canvas = Canvas(None, width=display.width, height=display.height, background=initialColor.value)
+        self.displayBuffer = DisplayBuffer(display.width, display.height, initialColor)
+        self.initialColor = initialColor
 
     def clear(self):
+        self.canvas.create_rectangle(0, 0, 83, 47, fill=self.initialColor.value)
         self.display.clear()
 
     def dispose(self):
-        self._updateDisplay()
-
-    def _updateDisplay(self):
         pixels = ImageUtils.getPixelsOf(self.canvas)
         self._drawDisplay(pixels)
         self.display.redraw()
@@ -51,24 +47,17 @@ class DisplayGraphics(object):
         """
         :param Color[][] pixels:
         """
-        height = len(pixels)
-        width = len(pixels[0])
+        width = len(pixels)
+        height = len(pixels[0])
 
-        for yImage in range(height):
-            for xImage in range(width):
-                self.displayBuffer.setPixel(
-                    xImage,
-                    yImage,
-                    pixels[yImage][xImage]
-                )
-                """
-                if pixels[yImage][xImage] == Color.WHITE:
+        for y in range(height):
+            for x in range(width):
+                self.displayBuffer.setPixel(x, y, pixels[x][y])
+                if pixels[x][y] == Color.WHITE:
                     print(' ', end='')
                 else:
                     print('.', end='')
-                """
-            #print()
-
+            print()
 
         iterator = self.displayBuffer.iterator
 

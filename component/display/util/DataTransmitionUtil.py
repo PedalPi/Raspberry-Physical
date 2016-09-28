@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import time
 from enum import Enum
 
 
@@ -82,4 +83,5 @@ class DataTransmitionUtil:
         # Its necessary only 10ns    Pag 22 - https://www.sparkfun.com/datasheets/LCD/Monochrome/Nokia5110.pdf
         # Not discoment :D
         #Gpio.delayMicroseconds(CLOCK_TIME_DELAY);
+        #time.sleep(0.000002)
         clock.off()

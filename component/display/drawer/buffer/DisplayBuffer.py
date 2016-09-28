@@ -48,7 +48,7 @@ class DisplayBuffer(object):
         """
         self.width = width
         self.height = height
-        self.dataBuffer = [[None] * height] * width
+        self.dataBuffer = [[None] * height for _ in range(width)]
         self.defaultColor = defaultColor
 
     def setPixel(self, x, y, color):
@@ -57,16 +57,11 @@ class DisplayBuffer(object):
 
         :param int x: Row position. 0 is first, top to down direction
         :param int y: Column position. 0 is first, left to right direction
-        :param Color color
+        :param Color color: Pixel color
         """
         pixel = self._getPixel(x, y)
 
-        if pixel is None:
-            print((x, y), " pixel not exists")
-            #raise IndexError((x, y), "pixel not exists")
-            return
-
-        elif pixel.color == color:
+        if pixel.color == color:
             return
 
         pixel.color = color
@@ -79,7 +74,7 @@ class DisplayBuffer(object):
         """
         if x < 0 or x > self.width - 1 \
         or y < 0 or y > self.height - 1:
-            return None
+            raise IndexError("Invalid pixel position", (x, y))
 
         pixel = self.dataBuffer[x][y]
         if pixel is None:
@@ -112,7 +107,7 @@ class DisplayBufferIterator(object):
         """
         :param deque<PixelBuffer> changes
         """
-        print(len(changes))
+        print("Total de mudanças computadas", len(changes))
         self.changes = changes
 
     def hasNext(self):
@@ -124,7 +119,6 @@ class DisplayBufferIterator(object):
             pixelBuffer = self.changes.popleft()
 
             if pixelBuffer.hasRealChange():
-                print('aaaaa')
                 return pixelBuffer
 
         return None

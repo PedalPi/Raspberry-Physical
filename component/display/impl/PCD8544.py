@@ -28,11 +28,6 @@ class PCD8544(MonochomaticDisplay):
     Based in Raspberry Pi version by Andre Wussow, 2012, desk@binerry.de
     Based in Raspberry Pi Java version by Cleverson dos Santos Assis, 2013, tecinfcsa@yahoo.com.br
     '''
-
-    #private static final int CLOCK_TIME_DELAY = 1;//micro seconds // 10 nanosseconds is the correct
-    #http://stackoverflow.com/questions/11498585/how-to-suspend-a-java-thread-for-a-small-period-of-time-like-100-nanoseconds
-    RESET_DELAY = 1 #10^-3ms is the correct
-
     DDRAM = None
 
     """ Data/Command mode select """
@@ -57,9 +52,7 @@ class PCD8544(MonochomaticDisplay):
         :param contrast
         :param inverse
         """
-        #super(PCD8544, self).__init__(clock_pin=sclk, mosi_pin=din, miso_pin=None, select_pin=cs)
-        print("Inicializando")
-
+        #super(PCD8544, self).__init__(clock_pin=sclk, mosi_pin=din, miso_pin=1, select_pin=cs)
         self.DDRAM = PCB8544DisplayDataRam(self, Color.WHITE)
 
         self.DIN = DigitalOutputDevice(din)
@@ -72,7 +65,6 @@ class PCD8544(MonochomaticDisplay):
         self._init(contrast, inverse)
 
         self.redraw()
-        print("Inicializado")
 
     def _reset(self):
         self.RST.off()
@@ -80,9 +72,11 @@ class PCD8544(MonochomaticDisplay):
         self.RST.on()
 
     def _init(self, contrast, inverse):
+        # H = 1
         self._sendCommand(SysCommand.FUNC | Setting.FUNC_H)
-        self._sendCommand(SysCommand.BIAS | 0x04)
+        self._sendCommand(SysCommand.BIAS | Setting.BIAS_BS2)
         self._sendCommand(SysCommand.VOP | contrast & 0x7f)
+        # H = 0
         self._sendCommand(SysCommand.FUNC)
         self._sendCommand(
             SysCommand.DISPLAY |
@@ -91,14 +85,15 @@ class PCD8544(MonochomaticDisplay):
         )
 
     def _sendCommand(self, data):
+        self.SCE.off()
         self.DC.off()
 
         #self._spi.write([data])
-        self.SCE.off()
-        self.writeDataCommand(data)
+        self._writeDataShiftOut(data)
+
         self.SCE.on()
 
-    def writeDataCommand(self, data):
+    def _writeDataShiftOut(self, data):
         DataTransmitionUtil.shiftOut(
             data,
             self.DIN,
@@ -118,8 +113,8 @@ class PCD8544(MonochomaticDisplay):
         self.SCLK.off()
 
     def setContrast(self, value):
-        self._sendCommand(SysCommand.FUNC, Setting.FUNC_H)
-        self._sendCommand(SysCommand.VOP, value & 0x7f)
+        self._sendCommand(SysCommand.FUNC | Setting.FUNC_H)
+        self._sendCommand(SysCommand.VOP | value & 0x7f)
         self._sendCommand(SysCommand.FUNC)
 
     def setPixel(self, x, y, color):
@@ -136,38 +131,22 @@ class PCD8544(MonochomaticDisplay):
         import time
         start_time = time.time()
 
-        self.DC.on()
-
-        self.SCE.off()
         while changes:
             bank = changes.popleft()
-            self._setCursorY(bank.y)
-            self._setCursorX(bank.x)
+            self._sendDataByte(bank.x, bank.y, bank.mbs_byte)
+            bank.setChanged(False)
 
-            self._sendData(bank)
-
-        self.SCE.on()
         print("--- %s seconds ---" % (time.time() - start_time))
 
-    def _sendData(self, bank):
-        """
-        :param PCB8544DDRamBank bank
-        """
-        #self._spi.write([bank.mbs_byte]
-        self._writeData(bank)
+    def _sendDataByte(self, x, y, byte):
+        self._setCursorX(x)
+        self._setCursorY(y)
 
-    def _writeData(self, bank):
-        iterator = bank.msbIterator()
-        while iterator.hasNext():
-            color = iterator.nextElement()
-            if color == Color.BLACK:
-                self.DIN.on()
-            else:
-                self.DIN.off()
-
-            self._toggleClock()
-
-        bank.setChanged(False)
+        self.SCE.off()
+        self.DC.on()
+        self._writeDataShiftOut(byte)
+        #self._spi.write([byte])
+        self.SCE.on()
 
     def _setCursorX(self, x):
         self._sendCommand(SysCommand.XADDR | x)

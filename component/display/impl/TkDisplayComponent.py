@@ -7,7 +7,6 @@ from tkinter import Tk, Frame
 from Display import Display
 from drawer.buffer.PixelBuffer import PixelBuffer
 
-from util.privatemethod import privatemethod
 from util.Color import Color
 
 
@@ -62,13 +61,12 @@ class TkDisplayComponent(Display):
             img.setRGB(pixel.x, pixel.y, pixel.getColor().getRGB())
 
             if debugMode:
-                self.simulateGPIODelay()
+                self._simulateGPIODelay()
 
             g = self.screen.getGraphics()
             g.drawImage(img, 0, 0, screen)
 
-    @privatemethod
-    def simulateGPIODelay(self):
+    def _simulateGPIODelay(self):
         sleep(0)
 
     def clear(self):

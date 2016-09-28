@@ -8,23 +8,25 @@ class ImageUtils:
     def getPixelsOf(canvas):
         width = int(canvas["width"])
         height = int(canvas["height"])
-        colors = [[None] * height] * width
+        colors = []
 
-        for y in range(height):
-            for x in range(width):
-                ids = canvas.find_overlapping(x, y, x, y)
-
-                if len(ids) > 0:
-                    index = ids[-1]
-                    colors[x][y] = canvas.itemcget(index, "fill")
-                    if colors[x][y] is None:
-                        colors[x][y] = Color.WHITE
-                        print("ImageUtils.getPixelsOf NONE INDEVIDO")
-                    else:
-                        colors[x][y] = Color.BLACK
-                else:
-                    colors[x][y] = Color.WHITE
-                #print(str(x), str(y), "-", colors[x][y], end = "")
+        for x in range(width):
+            column = []
+            for y in range(height):
+                column.append(ImageUtils.getColorOfPixel(canvas, x, y))
+            colors.append(column)
 
         return colors
-        #canvas.pack(fill=BOTH, expand=1)
+
+    @staticmethod
+    def getColorOfPixel(canvas, x, y):
+        ids = canvas.find_overlapping(x, y, x, y)
+
+        if len(ids) > 0:
+            index = ids[-1]
+            color = canvas.itemcget(index, "fill")
+            color = color.upper()
+            if color != '':
+                return Color[color.upper()]
+
+        return Color.WHITE

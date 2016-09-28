@@ -45,25 +45,25 @@ class PCB8544DDRamBank(object):
         index = 0
         value = 0
         for self.color in self.colors:
-            value += 0 if self.colors == Color.WHITE else index**2
+            value |= 0 if self.color == Color.WHITE else 1 << index
             index += 1
 
         return value
 
 class MsbIterator:
-    PCB8544DisplayDDramBank = None
+    bank = None
     count = None
 
-    def __init__(self, PCB8544DisplayDDramBank):
+    def __init__(self, bank):
         """
-        :param PCB8544DDRamBank PCB8544DisplayDDramBank
+        :param PCB8544DDRamBank bank:
         """
-        self.PCB8544DisplayDDramBank = PCB8544DisplayDDramBank
+        self.bank = bank
         self.count = 7
 
     def nextElement(self):
         self.count -= 1
-        return self.PCB8544DisplayDDramBank.getPixel(self.count)
+        return self.bank.getPixel(self.count)
 
     def hasNext(self):
         return self.count >= 0

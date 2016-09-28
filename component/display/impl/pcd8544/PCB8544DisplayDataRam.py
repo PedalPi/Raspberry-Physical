@@ -18,7 +18,7 @@ class PCB8544DisplayDataRam(object):
     See Pcd8544 datasheet for more information.
     """
 
-    dataBuffer = [[None] * DisplayDataRamSize.DDRAM_HEIGHT] * DisplayDataRamSize.DDRAM_WIDTH
+    dataBuffer = [[None] * DisplayDataRamSize.DDRAM_HEIGHT for _ in range(DisplayDataRamSize.DDRAM_WIDTH)]
 
     display = None
     initialColor = None
@@ -37,19 +37,17 @@ class PCB8544DisplayDataRam(object):
 
         for x in range(DisplayDataRamSize.DDRAM_WIDTH):
             for y in range(DisplayDataRamSize.DDRAM_HEIGHT):
-                self.dataBuffer[x][y] = PCB8544DDRamBank(x, y, initialColor)
-                self.changes.append(self.dataBuffer[x][y])
+                bank = PCB8544DDRamBank(x, y, initialColor)
+                self.dataBuffer[x][y] = bank
+                self.changes.append(bank)
 
     def setPixel(self, x, y, color):
         if not self._isPositionExists(x, y):
             raise IndexError("Position ("+x+", "+y+") don't exists")
-            raise IndexError("Position ("+x+", "+y+") don't exists")
-            #return
 
         if not (color == MonochomaticDisplay.DARK) and \
            not (color == MonochomaticDisplay.LIGHT):
             raise Exception("The color should be MonochomaticDisplay.DARK or MonochomaticDisplay.LIGHT!")
-            #color = MonochomaticDisplay.DARK
 
         bank = self.getBank(x, y)
         anotherChangeRegistred = bank.hasChanged()
@@ -61,15 +59,16 @@ class PCB8544DisplayDataRam(object):
 
     def getBank(self, x, y):
         """
-        :param int x
-        :param int y
+        :param int x:
+        :param int y:
+        :return PCD8544DDRamBank:
         """
         return self.dataBuffer[x][int(y/8)]
 
     def getPixel(self, x, y):
         """
-        :param int x
-        :param int y
+        :param int x:
+        :param int y:
         """
         if not self._isPositionExists(x, y):
             raise IndexError("Position (" + str(x) + ", " + str(y) + ") don't exists")

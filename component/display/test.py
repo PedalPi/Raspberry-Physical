@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#from impl.TkDisplayComponent import TkDisplayComponent
+from impl.TkDisplayComponent import TkDisplayComponent
 from impl.PCD8544 import PCD8544
 from drawer.DisplayGraphics import DisplayGraphics
 
@@ -15,7 +15,7 @@ def sleep(a):
 #  - PCD8544: Nokia 3110 and 5110
 #  - Tk: For tests in pc develop
 #display = TkDisplayComponent(500, 400, True)
-display = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7)
+display = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7, contrast=60, inverse=False)
 
 
 #print("Test: Display single pixel.\n")
@@ -73,7 +73,23 @@ print("Test: Draw image.\n")
 # Line, rectangle, circle (oval) tests
 
 print("Test: Draw lines.\n")
+
+
+
 for i in range(0, 84, 4):
+    graphics.canvas.create_line(i, 0, i, 47)
+    graphics.dispose()
+
+graphics.clear()
+
+for i in range(0, 48, 4):
+    graphics.canvas.create_line(0, i, 83, i)
+    graphics.dispose()
+
+graphics.clear()
+
+for i in range(0, 84, 4):
+    print((0, 0), (i, 47))
     graphics.canvas.create_line(0, 0, i, 47)
     graphics.dispose()
 
@@ -81,12 +97,14 @@ for i in range(0, 48, 4):
     graphics.canvas.create_line(0, 0, 83, i)
     graphics.dispose()
 
+
 graphics.clear()
 #sleep(5000)
 
 print("Test: Draw rectangles.\n")
 for i in range(0, 48, 2):
-    graphics.drawRect(i, i, 83 - i, 47 - i)
+    print((i, i), (83 - i, 47 - i))
+    graphics.canvas.create_rectangle(i, i, 83 - i, 47 - i, width=1, outline=Color.BLACK.value)
     graphics.dispose()
 
 graphics.clear()
@@ -94,9 +112,8 @@ graphics.clear()
 
 print("Test: Draw multiple rectangles.\n")
 for i in range(48):
-    color = Color.BLACK if i % 2 == 0 else Color.WHITE
-    graphics.setColor(color)
-    graphics.fillRect(i, i, 83 - i, 47 - i)
+    color = Color.BLACK.value if i % 2 == 0 else Color.WHITE.value
+    graphics.canvas.create_rectangle(i, i, 83 - i, 47 - i, fill=color, width=1)
     graphics.dispose()
 
 graphics.clear()

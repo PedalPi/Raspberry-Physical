@@ -22,5 +22,6 @@ class ByteUtil(object):
 
         return byte
 
+    @staticmethod
     def is_flag_active(byte, flag):
         return (byte & flag) != 0

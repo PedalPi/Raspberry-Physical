@@ -4,7 +4,6 @@
 
 from tkinter import Canvas
 
-from util.Color import Color
 from util.ImageUtils import ImageUtils
 
 from drawer.buffer.DisplayBuffer import DisplayBuffer
@@ -19,31 +18,30 @@ class DisplayGraphics(object):
 
     canvas = None
 
-    displayBuffer = None
+    display_buffer = None
 
-    initialColor = None
+    initial_color = None
 
-    def __init__(self, display, initialColor):
+    def __init__(self, display, initial_color):
         """
-        :param Display display
-        :param Color initialColor
-        :param ColorType type
+        :param Display display:
+        :param Color initial_color:
         """
         self.display = display
-        self.canvas = Canvas(None, width=display.width, height=display.height, background=initialColor.value)
-        self.displayBuffer = DisplayBuffer(display.width, display.height, initialColor)
-        self.initialColor = initialColor
+        self.canvas = Canvas(None, width=display.width, height=display.height, background=initial_color.value)
+        self.display_buffer = DisplayBuffer(display.width, display.height, initial_color)
+        self.initial_color = initial_color
 
     def clear(self):
-        self.canvas.create_rectangle(0, 0, 83, 47, fill=self.initialColor.value)
+        self.canvas.create_rectangle(0, 0, 83, 47, fill=self.initial_color.value)
         self.display.clear()
 
     def dispose(self):
         pixels = ImageUtils.getPixelsOf(self.canvas)
-        #self._drawDisplay(pixels)
+        #self._draw_display(pixels)
         self.display.redraw_test(pixels)
 
-    def _drawDisplay(self, pixels):
+    def _draw_display(self, pixels):
         """
         :param Color[][] pixels:
         """
@@ -52,7 +50,7 @@ class DisplayGraphics(object):
 
         for y in range(height):
             for x in range(width):
-                self.displayBuffer.setPixel(x, y, pixels[x][y])
+                self.display_buffer.setPixel(x, y, pixels[x][y])
             '''
                 if pixels[x][y] == Color.WHITE:
                     print(' ', end='')
@@ -61,7 +59,7 @@ class DisplayGraphics(object):
             print()
             '''
 
-        iterator = self.displayBuffer.iterator
+        iterator = self.display_buffer.iterator
 
         while iterator.hasNext():
             pixel = iterator.nextElement()

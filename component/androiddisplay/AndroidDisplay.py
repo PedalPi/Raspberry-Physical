@@ -9,10 +9,10 @@ class AndroidDisplay(Display):
         self.server = DisplayServer()
         self.server.listen(port, host)
 
-    def showEffect(self, effect):
+    def show_effect(self, effect):
         print(effect.index, '-', effect['name'])
         print(effect['uri'])
 
-    def showParam(self, param):
+    def show_param(self, param):
         print(param.index, '-', param['name'])
         print(param.value, '(', param['ranges']['minimum'], '-', param['ranges']['maximum'], ')')

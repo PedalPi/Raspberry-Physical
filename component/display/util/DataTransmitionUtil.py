@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import time
 from enum import Enum
 
 
@@ -85,3 +84,4 @@ class DataTransmitionUtil:
         #Gpio.delayMicroseconds(CLOCK_TIME_DELAY);
         #time.sleep(0.000002)
         clock.off()
+

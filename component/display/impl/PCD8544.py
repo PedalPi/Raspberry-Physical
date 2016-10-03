@@ -128,7 +128,6 @@ class PCD8544(MonochomaticDisplay):
         changes = self.DDRAM.changes
         print("Total de mudanças: ", len(changes))
 
-        import time
         start_time = time.time()
 
         while changes:
@@ -168,16 +167,6 @@ class PCD8544(MonochomaticDisplay):
 
         self.SCE.on()
         print("--- %s seconds ---" % (time.time() - start_time))
-
-    def _sendDataByte(self, x, y, byte):
-        self._setCursorX(x)
-        self._setCursorY(y)
-
-        self.SCE.off()
-        self.DC.on()
-        self._writeDataShiftOut(byte)
-        # self._spi.write([byte])
-        self.SCE.on()
 
     def _setCursorX(self, x):
         self._sendCommand(SysCommand.XADDR | x)

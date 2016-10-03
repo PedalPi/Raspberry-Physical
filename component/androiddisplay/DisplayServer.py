@@ -1,5 +1,3 @@
-import socket
-
 import tornado.gen
 import tornado.ioloop
 import tornado.iostream
@@ -36,4 +34,4 @@ class DisplayServer(tornado.tcpserver.TCPServer):
 
     def send(self, message):
         for client in self.clients:
-            client.stream.write(message, lambda : print("sended", message))
+            client.stream.write(message, lambda: print("Message has been send", message))

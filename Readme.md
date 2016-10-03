@@ -35,7 +35,7 @@ Not implemented yet
 
 Not implemented yet
 
-## To test Rest
+## To test
 
 Not implemented yet
 

@@ -8,27 +8,27 @@ class ActionsFacade(object):
         self.app = application
 
     @property
-    def currentPatch(self):
+    def current_patch(self):
         controller = self.app.controller(CurrentController)
         return controller.currentPatch
 
-    def toNextPatch(self):
+    def to_next_patch(self):
         controller = self.app.controller(CurrentController)
 
         controller.toNextPatch()
         return controller.currentPatch
 
-    def toBeforePatch(self):
+    def to_before_patch(self):
         controller = self.app.controller(CurrentController)
 
         controller.toBeforePatch()
         return controller.currentPatch
 
-    def toggleStatusEffect(self, effect):
+    def toggle_status_effect(self, effect):
         controller = self.app.controller(EffectController)
         controller.toggleStatus(effect)
 
-    def setParamValue(self, param, newValue):
+    def set_param_value(self, param, new_value):
         effect = param.effect
         controller = self.app.controller(CurrentController)
-        controller.setEffectParam(effect.index, param.index, newValue)
+        controller.setEffectParam(effect.index, param.index, new_value)

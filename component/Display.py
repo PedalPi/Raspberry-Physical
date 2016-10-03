@@ -3,8 +3,8 @@ from abc import ABCMeta
 
 class Display(metaclass=ABCMeta):
 
-    def showEffect(self, effect):
-        pass
+    def show_effect(self, effect):
+        raise NotImplementedError()
 
-    def showParam(self, param):
-        pass
+    def show_param(self, param):
+        raise NotImplementedError()

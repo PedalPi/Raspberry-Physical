@@ -1,7 +1,7 @@
 from util import usleep, msleep
 
 
-class Configuration8Pins(object):
+class AbstractConfigurationPins(object):
     def __init__(self, lcd):
         self.LCD = lcd
 
@@ -12,71 +12,80 @@ class Configuration8Pins(object):
         if self.LCD.rw is not None:
             self.LCD.rw.off()
 
-        self._write_4bits(0x03)
-        msleep(4.5)
-        self._write_4bits(0x03)
-        usleep(100)
-        self._write_4bits(0x03)
+        self.initialize()
 
         usleep(100)
 
-    def write_byte(self, byte):
+    def initialize(self):
+        raise NotImplementedError()
+
+    def write_4_bits(self, data):
+        self._write(ParallelBitsWriter.write_4_pins, data)
+
+    def write_8_bits(self, data):
+        self._write(ParallelBitsWriter.write_8_pins, data)
+
+    def _write(self, method, data):
         self.LCD.enable.off()
+        method(self.LCD, data)
+        self._clock_enable()
 
-        self._write_pins(byte)
-
+    def _clock_enable(self):
         usleep(2)
         self.LCD.enable.on()
         usleep(5)
         self.LCD.enable.off()
 
-    def _write_pins(self, data):
-        self.LCD.db7.value = (data & 0b10000000) >> 7 == 1
-        self.LCD.db6.value = (data & 0b01000000) >> 6 == 1
-        self.LCD.db5.value = (data & 0b00100000) >> 5 == 1
-        self.LCD.db4.value = (data & 0b00010000) >> 4 == 1
-        self.LCD.db3.value = (data & 0b00001000) >> 3 == 1
-        self.LCD.db2.value = (data & 0b00000100) >> 2 == 1
-        self.LCD.db1.value = (data & 0b00000010) >> 1 == 1
-        self.LCD.db0.value = (data & 0b00000001) == 1
 
-
-class Configuration4Pins(object):
+class Configuration8Pins(AbstractConfigurationPins):
     def __init__(self, lcd):
-        self.LCD = lcd
+        super().__init__(lcd)
 
-    def initialize_display(self):
-        msleep(50)
-
-        self.LCD.rs.off()
-        if self.LCD.rw is not None:
-            self.LCD.rw.off()
-
-        self._write_4bits(0x03)
+    def initialize(self):
+        self.write_4_bits(0x03)
         msleep(4.5)
-        self._write_4bits(0x03)
+        self.write_4_bits(0x03)
         usleep(100)
-        self._write_4bits(0x03)
-
-        self._write_4bits(0x02)
-        usleep(100)
+        self.write_4_bits(0x03)
 
     def write_byte(self, byte):
-        self._write_4bits(byte >> 4)
-        self._write_4bits(byte)
+        self.write_8_bits(byte)
 
-    def _write_4bits(self, data):
-        self.LCD.enable.off()
 
-        self._write_pins(data)
+class Configuration4Pins(AbstractConfigurationPins):
+    def __init__(self, lcd):
+        super().__init__(lcd)
 
-        usleep(2)
-        self.LCD.enable.on()
-        usleep(5)
-        self.LCD.enable.off()
+    def initialize(self):
+        self.write_4_bits(0x03)
+        msleep(4.5)
+        self.write_4_bits(0x03)
+        usleep(100)
+        self.write_4_bits(0x03)
 
-    def _write_pins(self, data):
-        self.LCD.db7.value = (data & 0b00001000) >> 3 == 1
-        self.LCD.db6.value = (data & 0b00000100) >> 2 == 1
-        self.LCD.db5.value = (data & 0b00000010) >> 1 == 1
-        self.LCD.db4.value = (data & 0b00000001) == 1
+        self.write_4_bits(0x02)
+
+    def write_byte(self, byte):
+        self.write_4_bits(byte >> 4)
+        self.write_4_bits(byte)
+
+
+class ParallelBitsWriter(object):
+
+    @staticmethod
+    def write_4_pins(lcd, data):
+        lcd.db7.value = (data & 0b00001000) >> 3 == 1
+        lcd.db6.value = (data & 0b00000100) >> 2 == 1
+        lcd.db5.value = (data & 0b00000010) >> 1 == 1
+        lcd.db4.value = (data & 0b00000001) == 1
+
+    @staticmethod
+    def write_8_pins(lcd, data):
+        lcd.db7.value = (data & 0b10000000) >> 7 == 1
+        lcd.db6.value = (data & 0b01000000) >> 6 == 1
+        lcd.db5.value = (data & 0b00100000) >> 5 == 1
+        lcd.db4.value = (data & 0b00010000) >> 4 == 1
+        lcd.db3.value = (data & 0b00001000) >> 3 == 1
+        lcd.db2.value = (data & 0b00000100) >> 2 == 1
+        lcd.db1.value = (data & 0b00000010) >> 1 == 1
+        lcd.db0.value = (data & 0b00000001) == 1

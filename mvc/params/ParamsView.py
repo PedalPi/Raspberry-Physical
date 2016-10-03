@@ -7,33 +7,32 @@ class ParamsView(View):
     controller = None
 
     display = None
-    nextPatch = None
-    beforePatch = None
+    next_patch = None
+    before_patch = None
     effect = None
-    rotaryEncoder = None
+    rotary_encoder = None
 
     def init(self, controller):
-        print(controller)
         self.controller = controller
 
-    def initComponents(self, components):
+    def init_components(self, components):
         self.display = components[Components.DISPLAY]
 
-        self.nextPatch = components[Components.NEXT_PATCH]
-        self.beforePatch = components[Components.BEFORE_PATCH]
+        self.next_patch = components[Components.NEXT_PATCH]
+        self.before_patch = components[Components.BEFORE_PATCH]
 
         self.effect = components[Components.EFFECT]
 
-        self.rotaryEncoder = components[Components.DIGITAL_ENCODER]
+        self.rotary_encoder = components[Components.DIGITAL_ENCODER]
 
-    def initComponentsActions(self):
-        self.effect.action = self.controller.returnToParamsController
+    def init_components_actions(self):
+        self.effect.action = self.controller.return_to_params_controller
 
-        self.nextPatch.action = self.controller.returnToParamsController
-        self.beforePatch.action = self.controller.returnToParamsController
+        self.next_patch.action = self.controller.return_to_params_controller
+        self.before_patch.action = self.controller.return_to_params_controller
 
-        self.rotaryEncoder.when_selected = self.controller.toNextParam
-        self.rotaryEncoder.when_rotated = self.when_rotary_rotated
+        self.rotary_encoder.when_selected = self.controller.to_next_param
+        self.rotary_encoder.when_rotated = self.when_rotary_rotated
 
     def when_rotary_rotated(self, state):
         if state == 1:
@@ -41,5 +40,5 @@ class ParamsView(View):
         else:
             self.controller.minusValue()
 
-    def showParam(self, param):
+    def show_param(self, param):
         self.display.showParam(param)

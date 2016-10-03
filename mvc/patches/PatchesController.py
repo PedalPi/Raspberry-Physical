@@ -4,58 +4,58 @@ from mvc.patches.PatchesView import PatchesView
 
 
 class PatchesController(Controller):
-    indexEffectFocused = 0
-    currentPatch = None
+    index_effect_focused = 0
+    current_patch = None
 
     def __init__(self, controllers, components, actions):
         super().__init__(controllers, components, actions, PatchesView)
 
-    def init(self, currentPatch):
-        self.currentPatch = currentPatch
-        self.view.showEffect(self.currentEffect)
+    def init(self, current_patch):
+        self.current_patch = current_patch
+        self.view.show_effect(self.current_effect)
 
         print('=' * 25)
-        print("Patch:", currentPatch['name'])
+        print("Patch:", current_patch['name'])
         print('=' * 25)
 
-    def toNextPatch(self):
-        nextPatch = self.actions.toNextPatch()
-        self.init(nextPatch)
+    def to_next_patch(self):
+        next_patch = self.actions.toNextPatch()
+        self.init(next_patch)
 
-    def toBeforePatch(self):
-        beforePatch = self.actions.toBeforePatch()
-        self.init(beforePatch)
+    def to_before_patch(self):
+        before_patch = self.actions.toBeforePatch()
+        self.init(before_patch)
 
-    def toggleStatusEffect(self):
-        effect = self.currentEffect
+    def toggle_status_effect(self):
+        effect = self.current_effect
         print("Effect:", effect['uri'])
-        print(" - Index:", self.indexEffectFocused)
+        print(" - Index:", self.index_effect_focused)
         print(" - Old status:", effect.status)
         self.actions.toggleStatusEffect(effect)
         print(" - New status:", effect.status)
 
     @property
-    def currentEffect(self):
-        return self.currentPatch.effects[self.indexEffectFocused]
+    def current_effect(self):
+        return self.current_patch.effects[self.index_effect_focused]
 
-    def toNextEffect(self):
-        self.indexEffectFocused += 1
-        if self.indexEffectFocused == len(self.currentPatch.effects):
-            self.indexEffectFocused = 0
+    def to_next_effect(self):
+        self.index_effect_focused += 1
+        if self.index_effect_focused == len(self.current_patch.effects):
+            self.index_effect_focused = 0
 
-        self.view.showEffect(self.currentEffect)
+        self.view.showEffect(self.current_effect)
 
-    def toBeforeEffect(self):
-        self.indexEffectFocused -= 1
+    def to_before_effect(self):
+        self.index_effect_focused -= 1
 
-        if self.indexEffectFocused == -1:
-            self.indexEffectFocused = len(self.currentPatch.effects) - 1
+        if self.index_effect_focused == -1:
+            self.index_effect_focused = len(self.current_patch.effects) - 1
 
-        self.view.showEffect(self.currentEffect)
+        self.view.showEffect(self.current_effect)
 
-    def toEffectsController(self):
+    def to_effects_controller(self):
         from mvc.params.ParamsController import ParamsController
 
         controller = self.controllers[ParamsController]
         controller.start()
-        controller.init(self.currentEffect)
+        controller.init(self.current_effect)

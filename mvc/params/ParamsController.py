@@ -4,48 +4,48 @@ from mvc.params.ParamsView import ParamsView
 
 
 class ParamsController(Controller):
-    indexParamFocused = 0
-    currentEffect = None
+    index_param_focused = 0
+    current_effect = None
 
     def __init__(self, controllers, components, actions):
         super().__init__(controllers, components, actions, ParamsView)
 
-    def init(self, currentEffect):
-        self.currentEffect = currentEffect
+    def init(self, current_effect):
+        self.current_effect = current_effect
 
-        self.view.showParam(self.currentParam)
+        self.view.showParam(self.current_param)
 
         print('=' * 25)
         print("Param:", self.currentParam['name'])
         print('=' * 25)
 
-    def toNextParam(self):
-        if self.indexParamFocused == len(self.params) - 1:
-            self.indexParamFocused = -1
+    def to_next_param(self):
+        if self.index_param_focused == len(self.params) - 1:
+            self.index_param_focused = -1
 
-        self.indexParamFocused += 1
-        self.view.showParam(self.currentParam)
+        self.index_param_focused += 1
+        self.view.showParam(self.current_param)
 
-    def addValue(self):
+    def add_value(self):
         param = self.currentParam
 
         maximum = param['ranges']['maximum']
-        newValue = param.value + 1
-        if newValue > maximum:
-            newValue = maximum
+        new_value = param.value + 1
+        if new_value > maximum:
+            new_value = maximum
 
-        self.actions.set_param_value(param, newValue)
+        self.actions.set_param_value(param, new_value)
         self.view.showParam(param)
 
-    def minusValue(self):
+    def minus_value(self):
         param = self.currentParam
 
         minimum = param['ranges']['minimum']
-        newValue = param.value - 1
-        if newValue < minimum:
-            newValue = minimum
+        new_value = param.value - 1
+        if new_value < minimum:
+            new_value = minimum
 
-        self.actions.set_param_value(param, newValue)
+        self.actions.set_param_value(param, new_value)
         self.view.showParam(param)
 
     @property
@@ -53,10 +53,10 @@ class ParamsController(Controller):
         return self.currentEffect.params
 
     @property
-    def currentParam(self):
-        return self.params[self.indexParamFocused]
+    def current_param(self):
+        return self.params[self.index_param_focused]
 
-    def returnToParamsController(self):
+    def return_to_params_controller(self):
         from mvc.patches.PatchesController import PatchesController
 
         controller = self.controllers[PatchesController]

@@ -7,38 +7,38 @@ class PatchesView(View):
     controller = None
 
     display = None
-    nextPatch = None
-    beforePatch = None
+    next_patch = None
+    before_patch = None
     effect = None
-    rotaryEncoder = None
+    rotary_encoder = None
 
     def init(self, controller):
         self.controller = controller
 
-    def initComponents(self, components):
+    def init_components(self, components):
         self.display = components[Components.DISPLAY]
 
-        self.nextPatch = components[Components.NEXT_PATCH]
-        self.beforePatch = components[Components.BEFORE_PATCH]
+        self.next_patch = components[Components.NEXT_PATCH]
+        self.before_patch = components[Components.BEFORE_PATCH]
 
         self.effect = components[Components.EFFECT]
 
-        self.rotaryEncoder = components[Components.DIGITAL_ENCODER]
+        self.rotary_encoder = components[Components.DIGITAL_ENCODER]
 
-    def initComponentsActions(self):
-        self.effect.action = self.controller.toggleStatusEffect
+    def init_components_actions(self):
+        self.effect.action = self.controller.toggle_status_effect
 
-        self.nextPatch.action = self.controller.toNextPatch
-        self.beforePatch.action = self.controller.toBeforePatch
+        self.next_patch.action = self.controller.to_next_patch
+        self.before_patch.action = self.controller.to_before_patch
 
-        self.rotaryEncoder.when_rotated = self.when_rotary_rotated
-        self.rotaryEncoder.when_selected = self.controller.toEffectsController
+        self.rotary_encoder.when_rotated = self.when_rotary_rotated
+        self.rotary_encoder.when_selected = self.controller.to_effects_controller
 
     def when_rotary_rotated(self, state):
         if state == 1:
-            self.controller.toNextEffect()
+            self.controller.to_next_nffect()
         else:
-            self.controller.toBeforeEffect()
+            self.controller.to_before_effect()
 
-    def showEffect(self, effect):
-        self.display.showEffect(effect)
+    def show_effect(self, effect):
+        self.display.show_effect(effect)

@@ -22,7 +22,7 @@ class Configurations(object):
         self.beforePatchButton = PatchComponent(18)
 
         # Effect
-        self.effectButton = EffectComponent(pinButton=26, pinLed=21)
+        self.effectButton = EffectComponent(pin_button=26, pin_led=21)
 
         # DigitalEncoder
         self.digitalEncoder = RotaryEncoderWithButton(pin_a=19, pin_b=13, button_pin=6, pullUp=True)

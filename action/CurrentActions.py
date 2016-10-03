@@ -8,15 +8,15 @@ class CurrentActions(object):
         self.app = application
         self.controller = self.app.controller(CurrentController)
 
-    def toNextPatch(self):
+    def to_next_patch(self):
         self.controller.toNextPatch()
 
-    def toBeforePatch(self):
+    def to_before_patch(self):
         self.controller.toBeforePatch()
 
-    def toggleEffectStatus(self, effectIndex):
-        self.controller.toggleStatusEffect(effectIndex)
+    def toggle_effect_status(self, effect_index):
+        self.controller.toggleStatusEffect(effect_index)
 
-    @propery
-    def currentPatch(self):
+    @property
+    def current_patch(self):
         return self.controller.getCurrentPatch()

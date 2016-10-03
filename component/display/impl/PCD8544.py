@@ -148,6 +148,37 @@ class PCD8544(MonochomaticDisplay):
         #self._spi.write([byte])
         self.SCE.on()
 
+    def redraw_test(self, pixelss):
+        print("Realizando redraw_test")
+        self._setCursorX(0)
+        self._setCursorY(0)
+
+        import time
+        start_time = time.time()
+
+        self.SCE.off()
+        self.DC.on()
+        for pixels in pixelss:
+            for pixel in pixels:
+                if pixel == Color.BLACK:
+                    self.DIN.on()
+                else:
+                    self.DIN.off()
+                self._toggleClock()
+
+        self.SCE.on()
+        print("--- %s seconds ---" % (time.time() - start_time))
+
+    def _sendDataByte(self, x, y, byte):
+        self._setCursorX(x)
+        self._setCursorY(y)
+
+        self.SCE.off()
+        self.DC.on()
+        self._writeDataShiftOut(byte)
+        # self._spi.write([byte])
+        self.SCE.on()
+
     def _setCursorX(self, x):
         self._sendCommand(SysCommand.XADDR | x)
 

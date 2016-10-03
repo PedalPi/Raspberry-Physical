@@ -1,5 +1,7 @@
 # Physical
 
+[![Code Health](https://landscape.io/github/PedalPi/Physical/master/landscape.svg?style=flat-square)](https://landscape.io/github/PedalPi/Physical/master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b75f4bea11dd4443b8415f1ade499152)](https://www.codacy.com/app/mateus-moura/Physical?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=PedalPi/Physical&amp;utm_campaign=Badge_Grade)
+
 Display, buttons status, leds are configured here
 
 ```

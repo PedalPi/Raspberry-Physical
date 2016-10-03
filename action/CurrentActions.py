@@ -17,6 +17,6 @@ class CurrentActions(object):
     def toggleEffectStatus(self, effectIndex):
         self.controller.toggleStatusEffect(effectIndex)
 
-    @param
+    @propery
     def currentPatch(self):
-        return controller.getCurrentPatch()
+        return self.controller.getCurrentPatch()

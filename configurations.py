@@ -25,4 +25,4 @@ class Configurations(object):
         self.effectButton = EffectComponent(pinButton=26, pinLed=21)
 
         # DigitalEncoder
-        self.digitalEncoder = RotaryEncoderWithButton(pinMinus=19, pinPlus=13, selectPin=6, pullUp=True)
+        self.digitalEncoder = RotaryEncoderWithButton(pin_a=19, pin_b=13, button_pin=6, pullUp=True)

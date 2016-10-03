@@ -54,13 +54,13 @@ class TkDisplayComponent(Display):
         self.changesBuffer.add(PixelBuffer(x, y, color))
 
     def redraw(self):
-        img = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        img = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
 
         while not self.changesBuffer.isEmpty():
             pixel = self.changesBuffer.remove()
             img.setRGB(pixel.x, pixel.y, pixel.getColor().getRGB())
 
-            if debugMode:
+            if self.debugMode:
                 self._simulateGPIODelay()
 
             g = self.screen.getGraphics()

@@ -3,12 +3,12 @@ from gpiozero import Button, LED
 
 
 class EffectComponent(object):
-    __effect = None
+    _effect = None
 
-    def __init__(self, pinButton, pinLed, twoState=True):
-        self.button = Button(pinButton, pull_up=False)
-        self.led = LED(pinLed)
-        self.twoState = twoState
+    def __init__(self, pin_button, pin_led, two_state=True):
+        self.button = Button(pin_button, pull_up=False)
+        self.led = LED(pin_led)
+        self.two_state = two_state
 
     @property
     def action(self):
@@ -20,14 +20,14 @@ class EffectComponent(object):
 
     @property
     def effect(self):
-        return self.__effect
+        return self._effect
 
     @effect.setter
     def effect(self, effect):
         """
         Update this component status by :param effect
         """
-        self.__effect = effect
+        self._effect = effect
         if effect.status:
             self.led.on()
         else:

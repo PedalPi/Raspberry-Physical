@@ -13,29 +13,28 @@ class Display(metaclass=ABCMeta):
         :param y Column position. 0 is first, left to right direction
         :param color
         """
-        ...
+        raise NotImplementedError()
 
     @abstractmethod
     def redraw(self):
         """
         Repaint the display, updating changes caused by use of setPixel method
         """
-        ...
+        raise NotImplementedError()
 
     @abstractmethod
     def clear(self):
         """
         Change the Display for initial stage
         """
-        ...
+        raise NotImplementedError()
 
     @property
     @abstractmethod
     def width(self):
-        ...
+        raise NotImplementedError()
 
     @property
     @abstractmethod
     def height(self):
-        ...
-
+        raise NotImplementedError()

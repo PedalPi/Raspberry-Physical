@@ -20,5 +20,5 @@ class Controller(metaclass=ABCMeta):
 
     def start(self):
         self.view.init(self)
-        self.view.initComponents(self.components)
-        self.view.initComponentsActions()
+        self.view.init_components(self.components)
+        self.view.init_components_actions()

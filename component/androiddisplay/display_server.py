@@ -3,7 +3,7 @@ import tornado.ioloop
 import tornado.iostream
 import tornado.tcpserver
 
-from component.androiddisplay.DisplayClient import DisplayClient
+from component.androiddisplay.display_client import DisplayClient
 
 
 class DisplayServer(tornado.tcpserver.TCPServer):

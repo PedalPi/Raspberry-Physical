@@ -14,9 +14,9 @@ class PixelBuffer:
 
     def __init__(self, x, y, color):
         """
-        :param int x
-        :param int y
-        :param Color color
+        :param int x:
+        :param int y:
+        :param Color color:
         """
         self.x = x
         self.y = y

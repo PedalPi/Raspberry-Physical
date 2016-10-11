@@ -1,7 +1,7 @@
 from gpiozero import LED
-from seven_segments_dictionary import dictionary
-from multiplex_thread import MultiplexThread
-from display_strategy import CommonStrategy, NotCommonStrategy
+from component.sevensegments.seven_segments_dictionary import dictionary
+from component.sevensegments.multiplex_thread import MultiplexThread
+from component.sevensegments.display_strategy import CommonStrategy, NotCommonStrategy
 
 
 class SevenSegmentsBoard(object):

@@ -1,5 +1,5 @@
 from component.Display import Display
-from component.androiddisplay.DisplayServer import DisplayServer
+from component.androiddisplay.display_server import DisplayServer
 
 
 class AndroidDisplay(Display):

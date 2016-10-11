@@ -15,9 +15,9 @@ class Physical(object):
     controllers = None
     actions = None
 
-    def __init__(self, application):
+    def __init__(self, application, test=False):
         self.app = application
-        self.config = Configurations()
+        self.config = Configurations(test=test)
 
         self.components = self.init_components(self.config)
 
@@ -26,16 +26,16 @@ class Physical(object):
 
         controller = self.controllers[PatchesController]
         controller.start()
-        controller.init(self.actions.currentPatch)
+        controller.init(self.actions.current_patch)
 
     def init_components(self, configurations):
         components = dict()
 
-        components[Components.DISPLAY] = configurations.display
-        components[Components.NEXT_PATCH] = configurations.nextPatchButton
-        components[Components.BEFORE_PATCH] = configurations.beforePatchButton
-        components[Components.EFFECT] = configurations.effectButton
-        components[Components.DIGITAL_ENCODER] = configurations.digitalEncoder
+        components[Components.DISPLAY] = configurations.displays[0]
+        components[Components.NEXT_PATCH] = configurations.next_patch_button
+        components[Components.BEFORE_PATCH] = configurations.before_patch_button
+        components[Components.EFFECT] = configurations.effect_button
+        components[Components.DIGITAL_ENCODER] = configurations.rotary_encoder
 
         return components
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from component.PatchComponent import PatchComponent
 from component.PCD8544DisplayComponent import PCD8544DisplayComponent
+from component.SevenSegmentsDisplay import SevenSegmentsDisplay
 from component.EffectComponent import EffectComponent
 from component.RotaryEncoder import RotaryEncoderWithButton
 from component.androiddisplay.AndroidDisplay import AndroidDisplay
@@ -14,8 +15,9 @@ class Configurations(object):
 
     def __init__(self):
         # Display
-        self.display = None#PCD8544DisplayComponent(1, 2, 3, 4, 5)
-        self.display = AndroidDisplay('localhost', 10000)
+        self.display = SevenSegmentsDisplay(a=13, b=6, c=16, d=20, e=21, f=19, g=26, dp=0, common_unit=5, common_tens=1)
+        #self.display = PCD8544DisplayComponent(1, 2, 3, 4, 5)
+        #self.display = AndroidDisplay('localhost', 10000)
 
         # Patch
         self.nextPatchButton = PatchComponent(15)

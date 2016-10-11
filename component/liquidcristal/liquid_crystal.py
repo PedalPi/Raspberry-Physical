@@ -1,11 +1,17 @@
 import time
-from gpiozero import DigitalOutputDevice
+from gpiozero import DigitalOutputDevice, SharedMixin, Device
 from command import Command
 from util import msleep, usleep, ByteUtil
 from configuration import Configuration4Pins
 
 
-class LiquidCrystal(object):
+def lcd(rs, enable, rw=None, **kwargs):
+    lcd = LiquidCrystal(**kwargs)
+    lcd._init(rs, enable, rw, **kwargs)
+
+    return lcd
+
+class LiquidCrystal(SharedMixin, Device):
     """
     Based in https://www.sparkfun.com/datasheets/LCD/HD44780.pdf
     """
@@ -17,32 +23,49 @@ class LiquidCrystal(object):
 
     content = None
 
+    db7 = None
+    db6 = None
+    db5 = None
+    db4 = None
+
+    enable = None
+    rs = None
+    rw = None
+
     _entry_mode = Command.ENTRY_MODE_SET | Command.MODE_INCREMENT | Command.NOT_ACCOPANIES_DISPLAY_SHIFT
     _display_control = Command.DISPLAY_ON_OFF_CONTROL | Command.DISPLAY_ON | Command.CURSOR_ON | Command.BLINKING_ON
 
-    def __init__(self, data_pins, rs, enable, rw=None):
+    def __init__(self, db7, db6, db5, db4):
+        super(Device, self).__init__()
+
         self.content = [[0x20] * self.columns for _ in range(self.rows)]
 
         self.strategy = Configuration4Pins(self)
-        self._init_pins(data_pins, rs, enable, rw)
+
+    def _init(self, rs, enable, rw=None, **kwargs):
+        self._init_pins(rs, enable, rw, **kwargs)
         self._init_display()
 
-    def _init_pins(self, data_pins, rs, enable, rw):
-        self.db7 = DigitalOutputDevice(data_pins['db7'])
-        self.db6 = DigitalOutputDevice(data_pins['db6'])
-        self.db5 = DigitalOutputDevice(data_pins['db5'])
-        self.db4 = DigitalOutputDevice(data_pins['db4'])
+    #@staticmethod
+    #def _shared_key(cls, db7, db6, db5, db4):
+    #    return (db7, db6, db5, db4)
+
+    def _init_pins(self, rs, enable, rw, db7, db6, db5, db4):
+        self.db7 = DigitalOutputDevice(db7)
+        self.db6 = DigitalOutputDevice(db6)
+        self.db5 = DigitalOutputDevice(db5)
+        self.db4 = DigitalOutputDevice(db4)
         #self.db3 = DigitalOutputDevice()
         #self.db2 = DigitalOutputDevice()
         #self.db1 = DigitalOutputDevice()
         #self.db0 = DigitalOutputDevice()
 
-        self.rs = DigitalOutputDevice(2)
+        self.rs = DigitalOutputDevice(rs)
         if rw is None:
             self.rw = None
         else:
-            self.rw = DigitalOutputDevice(6)
-        self.enable = DigitalOutputDevice(3)
+            self.rw = DigitalOutputDevice(rw)
+        self.enable = DigitalOutputDevice(enable)
 
     def _init_display(self):
         self.strategy.initialize_display()
@@ -177,7 +200,9 @@ class LiquidCrystal(object):
         self.command(self._entry_mode)
 
 
-display = LiquidCrystal({'db7': 18, 'db6': 15, 'db5': 14, 'db4':  4}, rs=2, enable=3)
+display = lcd(db7=18, db6=15, db5=14, db4=4, rs=2, enable=3)
+#display = LiquidCrystal(db7=18, db6=15, db5=14, db4=4, rs=2, enable=3)
+#display2 = lcd(db7=18, db6=15, db5=14, db4=4, rs=2, enable=3)
 
 
 display.write("PEDAL PI ")

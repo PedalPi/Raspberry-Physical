@@ -193,7 +193,7 @@ class SevenSegmentsDisplay(object):
         """
         self.strategy.rewrite()
 
-
+'''
 board = SevenSegmentsBoard(a=13, b=6, c=16, d=20, e=21, f=19, g=26)
 
 board.add_display(common=5, anode=False)
@@ -213,4 +213,4 @@ board.value = '~~'
 time.sleep(2)
 
 board.off()
-
+'''

@@ -12,4 +12,3 @@ class Components(Enum):
     EFFECT = "Effect button"
 
     DIGITAL_ENCODER = "Digital encoder with button"
-

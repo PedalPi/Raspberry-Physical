@@ -37,7 +37,7 @@ class DisplayGraphics(object):
         self.display.clear()
 
     def dispose(self):
-        pixels = ImageUtils.getPixelsOf(self.canvas)
+        pixels = ImageUtils.get_pixels_of(self.canvas)
         #self._draw_display(pixels)
         self.display.redraw_test(pixels)
 
@@ -50,7 +50,7 @@ class DisplayGraphics(object):
 
         for y in range(height):
             for x in range(width):
-                self.display_buffer.setPixel(x, y, pixels[x][y])
+                self.display_buffer.set_pixel(x, y, pixels[x][y])
             '''
                 if pixels[x][y] == Color.WHITE:
                     print(' ', end='')
@@ -61,9 +61,9 @@ class DisplayGraphics(object):
 
         iterator = self.display_buffer.iterator
 
-        while iterator.hasNext():
-            pixel = iterator.nextElement()
-            self.display.setPixel(
+        while iterator.has_next():
+            pixel = iterator.next_element()
+            self.display.set_pixel(
                 pixel.x,
                 pixel.y,
                 pixel.color

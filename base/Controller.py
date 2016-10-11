@@ -16,7 +16,7 @@ class Controller(metaclass=ABCMeta):
 
     @abstractmethod
     def init(self):
-        pass
+        raise NotImplementedError()
 
     def start(self):
         self.view.init(self)

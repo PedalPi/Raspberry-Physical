@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from util.Color import Color
+from util.color import Color
 
 
 class ImageUtils:
 
     @staticmethod
-    def getPixelsOf(canvas):
+    def get_pixels_of(canvas):
         width = int(canvas["width"])
         height = int(canvas["height"])
         colors = []
@@ -13,13 +13,13 @@ class ImageUtils:
         for x in range(width):
             column = []
             for y in range(height):
-                column.append(ImageUtils.getColorOfPixel(canvas, x, y))
+                column.append(ImageUtils.get_pixel_color(canvas, x, y))
             colors.append(column)
 
         return colors
 
     @staticmethod
-    def getColorOfPixel(canvas, x, y):
+    def get_pixel_color(canvas, x, y):
         ids = canvas.find_overlapping(x, y, x, y)
 
         if len(ids) > 0:

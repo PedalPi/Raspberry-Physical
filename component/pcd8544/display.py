@@ -5,7 +5,7 @@ from abc import ABCMeta, abstractmethod
 class Display(metaclass=ABCMeta):
 
     @abstractmethod
-    def setPixel(self, x, y, color):
+    def set_pixel(self, x, y, color):
         """
         Set a specific pixel for a color
 

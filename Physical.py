@@ -19,16 +19,16 @@ class Physical(object):
         self.app = application
         self.config = Configurations()
 
-        self.components = self.initComponents(self.config)
+        self.components = self.init_components(self.config)
 
         self.actions = ActionsFacade(application)
-        self.controllers = self.initControllers(self.components, self.actions)
+        self.controllers = self.init_controllers(self.components, self.actions)
 
         controller = self.controllers[PatchesController]
         controller.start()
         controller.init(self.actions.currentPatch)
 
-    def initComponents(self, configurations):
+    def init_components(self, configurations):
         components = dict()
 
         components[Components.DISPLAY] = configurations.display
@@ -39,7 +39,7 @@ class Physical(object):
 
         return components
 
-    def initControllers(self, components, actions):
+    def init_controllers(self, components, actions):
         controllers = {}
 
         controllers[PatchesController] = PatchesController(controllers, components, actions)

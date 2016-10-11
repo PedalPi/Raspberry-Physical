@@ -32,26 +32,26 @@ class DisplayBuffer(object):
     """
     changes = deque()
 
-    dataBuffer = None
+    data_buffer = None
 
     width = 0
     height = 0
-    defaultColor = 0
+    default_color = 0
 
-    def __init__(self, width, height, defaultColor):
+    def __init__(self, width, height, default_color):
         """
-       :param int width: Total columns
-       :param int height: Total rows
-       :param Color defaultColor: Initializes the pixels with this color
+        :param int width: Total columns
+        :param int height: Total rows
+        :param Color default_color: Initializes the pixels with this color
                            (in the initial state, is assumed that all the
                             pixels are in the currentColor)
         """
         self.width = width
         self.height = height
-        self.dataBuffer = [[None] * height for _ in range(width)]
-        self.defaultColor = defaultColor
+        self.data_buffer = [[None] * height for _ in range(width)]
+        self.default_color = default_color
 
-    def setPixel(self, x, y, color):
+    def set_pixel(self, x, y, color):
         """
         Set a specific pixel for a color
 
@@ -59,7 +59,7 @@ class DisplayBuffer(object):
         :param int y: Column position. 0 is first, left to right direction
         :param Color color: Pixel color
         """
-        pixel = self._getPixel(x, y)
+        pixel = self._get_pixel(x, y)
 
         if pixel.color == color:
             return
@@ -67,23 +67,23 @@ class DisplayBuffer(object):
         pixel.color = color
         self.changes.append(pixel)
 
-    def _getPixel(self, x, y):
+    def _get_pixel(self, x, y):
         """
-        :param int x
-        :param int y
+        :param int x:
+        :param int y:
         """
         if x < 0 or x > self.width - 1 \
         or y < 0 or y > self.height - 1:
             raise IndexError("Invalid pixel position", (x, y))
 
-        pixel = self.dataBuffer[x][y]
+        pixel = self.data_buffer[x][y]
         if pixel is None:
-            pixel = PixelBuffer(x, y, self.defaultColor)
-            self.dataBuffer[x][y] = pixel
+            pixel = PixelBuffer(x, y, self.default_color)
+            self.data_buffer[x][y] = pixel
 
         return pixel
 
-    def getChanges(self):
+    def get_changes(self):
         """
         CAUTION
         For any iterator.hasNext(), the element returned
@@ -105,26 +105,26 @@ class DisplayBufferIterator(object):
 
     def __init__(self, changes):
         """
-        :param deque<PixelBuffer> changes
+        :param deque<PixelBuffer> changes:
         """
         print("Total de mudanças computadas", len(changes))
         self.changes = changes
 
-    def hasNext(self):
-        self._nextElement = self._findNext()
+    def has_next(self):
+        self._nextElement = self._find_next()
         return self._nextElement is not None
 
-    def _findNext(self):
+    def _find_next(self):
         while self.changes:
-            pixelBuffer = self.changes.popleft()
+            pixel_buffer = self.changes.popleft()
 
-            if pixelBuffer.hasRealChange():
-                return pixelBuffer
+            if pixel_buffer.has_real_change():
+                return pixel_buffer
 
         return None
 
-    def nextElement(self):
-        pixelBuffer = self._nextElement
-        pixelBuffer.updateLastChangeColor()
+    def next_element(self):
+        pixel_buffer = self._nextElement
+        pixel_buffer.updateLastChangeColor()
 
-        return pixelBuffer
+        return pixel_buffer

@@ -1,11 +1,11 @@
-from gpiozero import LED
+from gpiozero import LED, CompositeOutputDevice
 from component.sevensegments.seven_segments_dictionary import dictionary
 from component.sevensegments.multiplex_thread import MultiplexThread
 from component.sevensegments.display_strategy import CommonStrategy, NotCommonStrategy
 from component.sevensegments.text_write_strategy import TextWriteStrategy
 
 
-class SevenSegmentsBoard(object):
+class SevenSegmentsBoard(CompositeOutputDevice):
     pins = []
 
     def __init__(self, a, b, c, d, e, f, g):
@@ -80,6 +80,12 @@ class SevenSegmentsBoard(object):
         for display in self.displays:
             display.on()
 
+    def toggle(self):
+        if self._status:
+            self.off()
+        else:
+            self.on()
+
     def register(self, char_symbol, byte):
         """
         Link a char_symbol with a byte. The byte represents a led state
@@ -93,6 +99,15 @@ class SevenSegmentsBoard(object):
         """
         dictionary[char_symbol] = byte
 
+    def close(self):
+        if self._thread is not None:
+            self._thread.stop()
+
+        for display in self.displays:
+            display.close()
+
+        for pin in self.pins:
+            pin.close()
 
 class SevenSegmentsDisplay(object):
 
@@ -174,6 +189,9 @@ class SevenSegmentsDisplay(object):
         It is used in multiplex displays
         """
         self.strategy.rewrite()
+
+    def close(self):
+        self.common.close()
 
 '''
 board = SevenSegmentsBoard(a=13, b=6, c=16, d=20, e=21, f=19, g=26)

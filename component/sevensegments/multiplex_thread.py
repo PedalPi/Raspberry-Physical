@@ -1,23 +1,19 @@
-import sys
 from time import sleep
+import threading
 
 
-if sys.version_info >= (3, 0):
-    from _thread import start_new_thread
-else:
-    from thread import start_new_thread
-
-
-class MultiplexThread(object):
+class MultiplexThread(threading.Thread):
     stopped = None
 
     def __init__(self, displays_manager):
+        threading.Thread.__init__(self)
+
         self.stopped = False
         self.manager = displays_manager
         self.sleep = 0.005
 
-    def start(self):
-        start_new_thread(self._start, ())
+    def run(self):
+        self._start()
 
     def _start(self):
         while not self.stopped:
@@ -32,4 +28,3 @@ class MultiplexThread(object):
 
     def stop(self):
         self.stopped = True
-

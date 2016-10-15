@@ -7,16 +7,15 @@ class PatchesController(Controller):
     index_effect_focused = 0
     current_patch = None
 
-    def __init__(self, controllers, components, actions):
-        super().__init__(controllers, components, actions, PatchesView)
+    def __init__(self, controllers, components, actions, observer):
+        super().__init__(controllers, components, actions, observer, PatchesView)
 
     def init(self, current_patch):
         self.current_patch = current_patch
         self.view.show_effect(self.current_effect)
 
-        print('=' * 25)
-        print("Patch:", current_patch['name'])
-        print('=' * 25)
+    def on_current_patch_change(self, patch, token=None):
+        self.init(patch)
 
     def to_next_patch(self):
         next_patch = self.actions.to_next_patch()

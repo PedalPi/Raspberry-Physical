@@ -7,8 +7,8 @@ class ParamsController(Controller):
     index_param_focused = 0
     current_effect = None
 
-    def __init__(self, controllers, components, actions):
-        super().__init__(controllers, components, actions, ParamsView)
+    def __init__(self, controllers, components, observer, actions):
+        super().__init__(controllers, components, actions, observer, ParamsView)
 
     def init(self, current_effect):
         self.current_effect = current_effect

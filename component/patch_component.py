@@ -6,7 +6,7 @@ class PatchComponent(object):
     button = None
 
     def __init__(self, pin):
-        self.button = Button(pin, pull_up=False)
+        self.button = Button(pin, pull_up=True)
 
     @property
     def action(self):

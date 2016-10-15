@@ -2,6 +2,7 @@ from gpiozero import LED
 from component.sevensegments.seven_segments_dictionary import dictionary
 from component.sevensegments.multiplex_thread import MultiplexThread
 from component.sevensegments.display_strategy import CommonStrategy, NotCommonStrategy
+from component.sevensegments.text_write_strategy import TextWriteStrategy
 
 
 class SevenSegmentsBoard(object):
@@ -45,11 +46,10 @@ class SevenSegmentsBoard(object):
 
     @value.setter
     def value(self, text):
-        text = str(text)
         if self._thread is not None:
             self._thread.stop()
 
-        self._value = self._prepare_text(text)
+        self._value = TextWriteStrategy.prepare_text(len(self.displays), text)
 
         for character, display in zip(self._value, self.displays):
             display.value = character
@@ -57,24 +57,6 @@ class SevenSegmentsBoard(object):
         if len(self.displays) > 1:
             self._thread = MultiplexThread(self)
             self._thread.start()
-
-    def _prepare_text(self, text):
-        """
-        if text > total displays, truncate. Text will be the
-        last len(total displays) characters
-
-        if text < total displays, add space (' ') in left
-
-        :param string text: Text will be prepared
-        :return: text prepared
-        """
-        total_displays = len(self.displays)
-
-        text = text[-total_displays:]
-        if len(text) < total_displays:
-            text = ' ' * (total_displays - len(text)) + text
-
-        return text
 
     def off(self):
         if not self._status:

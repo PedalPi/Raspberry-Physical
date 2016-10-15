@@ -1,4 +1,4 @@
-from component.Display import Display
+from component.display import Display
 from component.sevensegments.seven_segments import SevenSegmentsBoard
 
 
@@ -10,7 +10,10 @@ class SevenSegmentsDisplay(Display):
         self.board.add_display(common=common_tens, anode=True)
 
     def show_effect(self, effect):
-        self.board.value = effect.patch.index
+        if effect is None:
+            self.board.value = '--'
+        else:
+            self.board.value = effect.patch.index
 
     def show_param(self, param):
         pass

@@ -1,6 +1,6 @@
 from base.View import View
 
-from component.Components import Components
+from component.components import Components
 
 
 class ParamsView(View):

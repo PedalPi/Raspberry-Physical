@@ -1,6 +1,6 @@
 from base.View import View
 
-from component.Components import Components
+from component.components import Components
 
 
 class PatchesView(View):
@@ -36,7 +36,7 @@ class PatchesView(View):
 
     def when_rotary_rotated(self, state):
         if state == 1:
-            self.controller.to_next_nffect()
+            self.controller.to_next_effect()
         else:
             self.controller.to_before_effect()
 

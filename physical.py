@@ -2,7 +2,7 @@
 from configurations import Configurations
 
 from action.ActionsFacade import ActionsFacade
-from component.Components import Components
+from component.components import Components
 
 from mvc.params.ParamsController import ParamsController
 from mvc.patches.PatchesController import PatchesController

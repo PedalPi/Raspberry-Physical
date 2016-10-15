@@ -19,23 +19,29 @@ class PatchesController(Controller):
         print('=' * 25)
 
     def to_next_patch(self):
-        next_patch = self.actions.toNextPatch()
+        next_patch = self.actions.to_next_patch()
         self.init(next_patch)
 
     def to_before_patch(self):
-        before_patch = self.actions.toBeforePatch()
+        before_patch = self.actions.to_before_patch()
         self.init(before_patch)
 
     def toggle_status_effect(self):
         effect = self.current_effect
+        if effect is None:
+            return
+
         print("Effect:", effect['uri'])
         print(" - Index:", self.index_effect_focused)
         print(" - Old status:", effect.status)
-        self.actions.toggleStatusEffect(effect)
+        self.actions.toggle_status_effect(effect)
         print(" - New status:", effect.status)
 
     @property
     def current_effect(self):
+        if not self.current_patch.effects:
+            return None
+
         return self.current_patch.effects[self.index_effect_focused]
 
     def to_next_effect(self):
@@ -54,6 +60,9 @@ class PatchesController(Controller):
         self.view.showEffect(self.current_effect)
 
     def to_effects_controller(self):
+        if self.current_effect is None:
+            return
+
         from mvc.params.ParamsController import ParamsController
 
         controller = self.controllers[ParamsController]

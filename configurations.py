@@ -26,23 +26,18 @@ class Configurations(object):
             self.configure()
 
     def configure(self):
-        # Display
-        # self.display = SevenSegmentsDisplay(a=13, b=6, c=16, d=20, e=21, f=19, g=26, dp=0, common_unit=5, common_tens=1)
         self.displays = [
             SevenSegmentsDisplay(a=13, b=6, c=16, d=20, e=21, f=19, g=26, dp=0, common_unit=5, common_tens=1),
-            AndroidDisplay('localhost', 10000)
+            AndroidDisplay('localhost', 10000),
+            # PCD8544DisplayComponent(1, 2, 3, 4, 5)
         ]
-        # self.display = PCD8544DisplayComponent(1, 2, 3, 4, 5)
 
-        # Patch
-        self.next_patch_button = PatchComponent(15)
-        self.before_patch_button = PatchComponent(18)
+        self.next_patch_button = PatchComponent(14)
+        self.before_patch_button = PatchComponent(15)
 
-        # Effect
-        self.effect_button = EffectComponent(pin_button=26, pin_led=21)
+        self.effect_button = EffectComponent(pin_button=MockPin(40), pin_led=MockPin(41))
 
-        # DigitalEncoder
-        self.rotary_encoder = RotaryEncoderWithButton(pin_a=19, pin_b=13, button_pin=6, pull_up=True)
+        self.rotary_encoder = RotaryEncoderWithButton(pin_a=MockPin(42), pin_b=MockPin(43), button_pin=MockPin(44), pull_up=True)
 
     def test(self):
         # Display
@@ -53,19 +48,16 @@ class Configurations(object):
                 g=MockPin(26), dp=MockPin(0),
                 common_unit=MockPin(5),
                 common_tens=MockPin(1)
-            )
+            ),
+            # self.display = PCD8544DisplayComponent(1, 2, 3, 4, 5)
+            # self.display = AndroidDisplay('localhost', 10000)
         ]
-        # self.display = PCD8544DisplayComponent(1, 2, 3, 4, 5)
-        # self.display = AndroidDisplay('localhost', 10000)
 
-        # Patch
         self.next_patch_button = PatchComponent(MockPin(15))
         self.before_patch_button = PatchComponent(MockPin(18))
 
-        # Effect
         self.effect_button = EffectComponent(pin_button=MockPin(28), pin_led=MockPin(29))
 
-        # DigitalEncoder
         self.rotary_encoder = RotaryEncoderWithButton(
             pin_a=MockPin(30),
             pin_b=MockPin(31),

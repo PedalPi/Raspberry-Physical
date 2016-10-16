@@ -1,5 +1,5 @@
 from application.model.UpdatesObserver import UpdatesObserver
-from physical.action.ActionsFacade import ActionsFacade
+from physical.controller.pedal_zero_controller.action.actions_facade import ActionsFacade
 
 
 class UpdatesObserverPhysical(UpdatesObserver):

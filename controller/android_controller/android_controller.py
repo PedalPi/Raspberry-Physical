@@ -1,7 +1,8 @@
-from physical.base.extern_controller import ExternController
-from physical.component.android_controller.android_controller_client import AndroidControllerClient
-from physical.component.android_controller.android_updates_observer import AndroidUpdatesObserver
-from physical.component.android_controller.protocol.message_type import MessageType
+from physical.controller.android_controller.android_controller_client import AndroidControllerClient
+from physical.controller.android_controller.android_updates_observer import AndroidUpdatesObserver
+from physical.controller.android_controller.protocol.message_type import MessageType
+
+from physical.base.controller import Controller
 
 from application.controller.EffectController import EffectController
 from application.controller.ParamController import ParamController
@@ -9,7 +10,7 @@ from application.controller.ParamController import ParamController
 import os
 
 
-class AndroidController(ExternController):
+class AndroidController(Controller):
     def __init__(self, application):
         super(AndroidController, self).__init__(application, self.__class__.__name__)
         self.client = AndroidControllerClient('localhost', 8888)

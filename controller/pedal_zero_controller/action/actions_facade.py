@@ -9,10 +9,6 @@ class ActionsFacade(object):
     def __init__(self, application):
         self.app = application
 
-    def register(self, observer):
-        """ Register updates """
-        self.app.controller(NotificationController).register(observer)
-
     @property
     def current_patch(self):
         controller = self.app.controller(CurrentController)

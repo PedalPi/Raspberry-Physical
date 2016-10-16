@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from base.Controller import Controller
-from mvc.patches.PatchesView import PatchesView
+from physical.controller.pedal_zero_controller.mvc.controller import Controller
+from physical.controller.pedal_zero_controller.mvc.patches.patches_view import PatchesView
 
 
 class PatchesController(Controller):

@@ -1,6 +1,7 @@
+from physical.controller.android_controller.protocol.message_type import MessageType
+from physical.controller.android_controller.protocol.message import Message
+
 from application.model.UpdatesObserver import UpdatesObserver
-from physical.component.android_controller.protocol.message import Message
-from physical.component.android_controller.protocol.message_type import MessageType
 
 
 class AndroidUpdatesObserver(UpdatesObserver):

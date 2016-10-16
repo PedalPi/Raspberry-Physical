@@ -1,7 +1,7 @@
 import json
 
-from physical.component.android_controller.protocol.message import Message
-from physical.component.android_controller.protocol.message_type import MessageType
+from physical.controller.android_controller.protocol.message_type import MessageType
+from physical.controller.android_controller.protocol.message import Message
 
 
 class MessageBuilder(object):

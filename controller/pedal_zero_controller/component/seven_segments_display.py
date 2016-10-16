@@ -1,5 +1,5 @@
-from component.display import Display
-from component.sevensegments.seven_segments import SevenSegmentsBoard
+from physical.controller.pedal_zero_controller.component.display import Display
+from physical.component.sevensegments.seven_segments import SevenSegmentsBoard
 
 
 class SevenSegmentsDisplay(Display):

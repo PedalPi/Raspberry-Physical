@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from base.Controller import Controller
-from mvc.params.ParamsView import ParamsView
+from physical.controller.pedal_zero_controller.mvc.controller import Controller
+from physical.controller.pedal_zero_controller.mvc.params.params_view import ParamsView
 
 
 class ParamsController(Controller):

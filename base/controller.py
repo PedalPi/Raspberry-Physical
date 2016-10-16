@@ -2,7 +2,7 @@ from application.model.UpdatesObserver import UpdatesObserver
 from application.controller.NotificationController import NotificationController
 
 
-class ExternController(object):
+class Controller(object):
 
     def __init__(self, application, token):
         """
@@ -11,6 +11,9 @@ class ExternController(object):
         """
         self.application = application
         self.token = token
+
+    def init(self):
+        pass
 
     def controller(self, controller):
         return self.application.controller(controller)

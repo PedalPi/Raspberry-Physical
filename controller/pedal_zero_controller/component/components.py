@@ -4,7 +4,7 @@ from enum import Enum
 
 class Components(Enum):
 
-    DISPLAY = "Display"
+    DISPLAYS = "Displays"
 
     NEXT_PATCH = "Next patch button"
     BEFORE_PATCH = "Before patch button"

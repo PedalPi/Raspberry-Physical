@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from component.displays_component import DisplayComponent
-from component.patch_component import PatchComponent
-#from component.PCD8544DisplayComponent import PCD8544DisplayComponent
-from component.sevensegments.seven_segments_display import SevenSegmentsDisplay
-from component.effect_component import EffectComponent
-from component.rotary_encoder import RotaryEncoderWithButton
+from physical.controller.pedal_zero_controller.component.displays_component import DisplaysComponent
+from physical.controller.pedal_zero_controller.component.patch_component import PatchComponent
+
+from physical.controller.pedal_zero_controller.component.seven_segments_display import SevenSegmentsDisplay
+from physical.controller.pedal_zero_controller.component.effect_component import EffectComponent
+from physical.component.rotary_encoder import RotaryEncoderWithButton
+
 from gpiozero.pins.mock import MockPin
 
 
@@ -26,7 +27,7 @@ class Configurations(object):
             self.configure()
 
     def configure(self):
-        self.displays = DisplayComponent()
+        self.displays = DisplaysComponent()
         self.displays.append(SevenSegmentsDisplay(a=13, b=6, c=16, d=20, e=21, f=19, g=26, dp=0, common_unit=5, common_tens=1))
         #self.displays.append(DisplayViewClient('localhost', 10000))
         #self.displays.append(PCD8544DisplayComponent(1, 2, 3, 4, 5))
@@ -40,7 +41,7 @@ class Configurations(object):
 
     def test(self):
         # Display
-        self.displays = DisplayComponent()
+        self.displays = DisplaysComponent()
         self.displays.append(
             SevenSegmentsDisplay(
                 a=MockPin(13), b=MockPin(6), c=MockPin(16),

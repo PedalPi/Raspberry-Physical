@@ -1,6 +1,7 @@
-from physical.component.android_controller.protocol.message_builder import MessageBuilder
-from tornado.tcpclient import TCPClient
 from tornado import gen
+from tornado.tcpclient import TCPClient
+
+from physical.controller.android_controller.protocol.message_builder import MessageBuilder
 
 
 class AndroidControllerClient(object):

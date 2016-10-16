@@ -1,4 +1,4 @@
-from physical.component.display import Display
+from physical.controller.pedal_zero_controller.component.display import Display
 
 
 class DisplaysComponent(Display):
@@ -6,7 +6,7 @@ class DisplaysComponent(Display):
     def __init__(self):
         self.displays = []
 
-    def add(self, display):
+    def append(self, display):
         self.displays.append(display)
 
     def show_param(self, param):

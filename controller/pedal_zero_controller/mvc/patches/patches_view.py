@@ -1,9 +1,8 @@
-from base.View import View
+from physical.controller.pedal_zero_controller.mvc.view import View
+from physical.controller.pedal_zero_controller.component.components import Components
 
-from component.components import Components
 
-
-class ParamsView(View):
+class PatchesView(View):
     controller = None
 
     displays = None
@@ -26,19 +25,19 @@ class ParamsView(View):
         self.rotary_encoder = components[Components.DIGITAL_ENCODER]
 
     def init_components_actions(self):
-        self.effect.action = self.controller.return_to_params_controller
+        self.effect.action = self.controller.toggle_status_effect
 
-        self.next_patch.action = self.controller.return_to_params_controller
-        self.before_patch.action = self.controller.return_to_params_controller
+        self.next_patch.action = self.controller.to_next_patch
+        self.before_patch.action = self.controller.to_before_patch
 
-        self.rotary_encoder.when_selected = self.controller.to_next_param
         self.rotary_encoder.when_rotated = self.when_rotary_rotated
+        self.rotary_encoder.when_selected = self.controller.to_effects_controller
 
     def when_rotary_rotated(self, state):
         if state == 1:
-            self.controller.addValue()
+            self.controller.to_next_effect()
         else:
-            self.controller.minusValue()
+            self.controller.to_before_effect()
 
-    def show_param(self, param):
-        self.displays.show_param(param)
+    def show_effect(self, effect):
+        self.displays.show_effect(effect)

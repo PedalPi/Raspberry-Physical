@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
+from component.displays_component import DisplayComponent
 from component.patch_component import PatchComponent
 #from component.PCD8544DisplayComponent import PCD8544DisplayComponent
 from component.sevensegments.seven_segments_display import SevenSegmentsDisplay
 from component.effect_component import EffectComponent
 from component.rotary_encoder import RotaryEncoderWithButton
-from component.androiddisplay.android_display import AndroidDisplay
 from gpiozero.pins.mock import MockPin
 
 
@@ -26,11 +26,10 @@ class Configurations(object):
             self.configure()
 
     def configure(self):
-        self.displays = [
-            SevenSegmentsDisplay(a=13, b=6, c=16, d=20, e=21, f=19, g=26, dp=0, common_unit=5, common_tens=1),
-            AndroidDisplay('localhost', 10000),
-            # PCD8544DisplayComponent(1, 2, 3, 4, 5)
-        ]
+        self.displays = DisplayComponent()
+        self.displays.append(SevenSegmentsDisplay(a=13, b=6, c=16, d=20, e=21, f=19, g=26, dp=0, common_unit=5, common_tens=1))
+        #self.displays.append(DisplayViewClient('localhost', 10000))
+        #self.displays.append(PCD8544DisplayComponent(1, 2, 3, 4, 5))
 
         self.next_patch_button = PatchComponent(14)
         self.before_patch_button = PatchComponent(15)
@@ -41,17 +40,17 @@ class Configurations(object):
 
     def test(self):
         # Display
-        self.displays = [
+        self.displays = DisplayComponent()
+        self.displays.append(
             SevenSegmentsDisplay(
                 a=MockPin(13), b=MockPin(6), c=MockPin(16),
                 d=MockPin(20), e=MockPin(21), f=MockPin(19),
                 g=MockPin(26), dp=MockPin(0),
                 common_unit=MockPin(5),
                 common_tens=MockPin(1)
-            ),
-            # self.display = PCD8544DisplayComponent(1, 2, 3, 4, 5)
-            # self.display = AndroidDisplay('localhost', 10000)
-        ]
+            )
+        )
+        #self.displays.append(PCD8544DisplayComponent(1, 2, 3, 4, 5))
 
         self.next_patch_button = PatchComponent(MockPin(15))
         self.before_patch_button = PatchComponent(MockPin(18))

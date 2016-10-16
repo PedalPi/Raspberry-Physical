@@ -38,7 +38,7 @@ class Physical(object):
     def init_components(self, configurations):
         components = dict()
 
-        components[Components.DISPLAY] = configurations.displays[0]
+        components[Components.DISPLAYS] = configurations.displays
         components[Components.NEXT_PATCH] = configurations.next_patch_button
         components[Components.BEFORE_PATCH] = configurations.before_patch_button
         components[Components.EFFECT] = configurations.effect_button

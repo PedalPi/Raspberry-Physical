@@ -109,6 +109,7 @@ class SevenSegmentsBoard(CompositeOutputDevice):
         for pin in self.pins:
             pin.close()
 
+
 class SevenSegmentsDisplay(object):
 
     def __init__(self, a, b, c, d, e, f, g, common=None, anode=False):

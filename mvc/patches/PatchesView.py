@@ -6,7 +6,7 @@ from component.components import Components
 class PatchesView(View):
     controller = None
 
-    display = None
+    displays = None
     next_patch = None
     before_patch = None
     effect = None
@@ -16,7 +16,7 @@ class PatchesView(View):
         self.controller = controller
 
     def init_components(self, components):
-        self.display = components[Components.DISPLAY]
+        self.displays = components[Components.DISPLAYS]
 
         self.next_patch = components[Components.NEXT_PATCH]
         self.before_patch = components[Components.BEFORE_PATCH]
@@ -41,4 +41,4 @@ class PatchesView(View):
             self.controller.to_before_effect()
 
     def show_effect(self, effect):
-        self.display.show_effect(effect)
+        self.displays.show_effect(effect)

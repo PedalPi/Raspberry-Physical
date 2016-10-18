@@ -17,6 +17,7 @@ class AndroidControllerClient(object):
     @gen.coroutine
     def run(self):
         self.stream = yield TCPClient().connect(self.address, self.port)
+        print(self.stream)
 
         while True:
             data = yield self.stream.read_until('\n'.encode(self.encoding))

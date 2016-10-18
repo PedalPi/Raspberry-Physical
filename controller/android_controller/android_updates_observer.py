@@ -5,24 +5,49 @@ from application.model.UpdatesObserver import UpdatesObserver
 
 
 class AndroidUpdatesObserver(UpdatesObserver):
-    def __init__(self, client):
+    def __init__(self, client, token):
         self.client = client
+        self.token = token
 
     def onBankUpdate(self, bank, update_type, token=None):
         pass
 
     def onParamValueChange(self, param, token=None):
-        pass
+        if token == self.token:
+            return
+
+        effect = param.effect
+
+        data = {
+            'effect': effect.index,
+            'param': param.index,
+            'value': param.value
+        }
+        message = Message(MessageType.PARAM, data)
+        self.client.send(message)
 
     def onEffectStatusToggled(self, effect, token=None):
-        pass
+        if token == self.token:
+            return
+
+        message = Message(MessageType.EFFECT, {'index': effect.index})
+        self.client.send(message)
 
     def onEffectUpdated(self, effect, update_type, token=None):
+        if token == self.token:
+            return
+
         pass
 
     def onCurrentPatchChange(self, patch, token=None):
-        message = Message(MessageType.PATCH, patch)
+        if token == self.token:
+            return
+
+        message = Message(MessageType.PATCH, patch.json)
         self.client.send(message)
 
     def onPatchUpdated(self, patch, update_type, token=None):
+        if token == self.token:
+            return
+
         pass

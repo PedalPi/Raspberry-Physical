@@ -8,3 +8,6 @@ class MessageType(Enum):
     PARAM = "param"
     PATCH = "patch"
     ERROR = "error"
+
+    def __str__(self):
+        return self.value

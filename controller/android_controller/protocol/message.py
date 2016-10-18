@@ -19,3 +19,6 @@ class Message(object):
             return str(self.message_type) + " " + json.dumps(self.content) + "\n"
         else:
             return str(self.message_type) + "\n"
+
+    def __getitem__(self, key):
+        return self.content[key]

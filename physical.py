@@ -9,7 +9,7 @@ class Physical(object):
         self.app = application
         self.controllers = [
             PedalZeroController(application, test),
-            AndroidController(application)
+            AndroidController(application, "~/Desktop/adb-arm/adb-rpi3")
         ]
 
         self.start(self.controllers)

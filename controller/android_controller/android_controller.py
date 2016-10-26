@@ -1,9 +1,9 @@
+from application.architecture.Component import Component
+
 from physical.controller.android_controller.android_controller_client import AndroidControllerClient
 from physical.controller.android_controller.android_updates_observer import AndroidUpdatesObserver
 from physical.controller.android_controller.protocol.message_type import MessageType
 from physical.controller.android_controller.protocol.message import Message
-
-from physical.base.controller import Controller
 
 from application.controller.CurrentController import CurrentController
 from application.controller.EffectController import EffectController
@@ -12,11 +12,11 @@ from application.controller.ParamController import ParamController
 import os
 
 
-class AndroidController(Controller):
+class AndroidController(Component):
     def __init__(self, application, adb_command="adb"):
-        super(AndroidController, self).__init__(application, self.__class__.__name__)
+        super(AndroidController, self).__init__(application)
         self.client = AndroidControllerClient('localhost', 8888)
-        self.observer = AndroidUpdatesObserver(self.client, self.token)
+        self.observer = AndroidUpdatesObserver(self.client, token=self.__class__.__name__)
         self.adb_command = adb_command
 
     def init(self):

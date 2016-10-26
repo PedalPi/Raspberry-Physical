@@ -41,5 +41,5 @@ Not implemented yet
 
 ## To mount
 
-For add correctly the components, show configuration.py
+For add correctly the components, see controller/pedal_pi_zero/configurations.py
 

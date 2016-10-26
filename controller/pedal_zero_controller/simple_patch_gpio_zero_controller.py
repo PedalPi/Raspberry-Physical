@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from application.architecture.Component import Component
+
 from physical.controller.pedal_zero_controller.configurations import Configurations
 from physical.controller.pedal_zero_controller.component.components import Components
 from physical.controller.pedal_zero_controller.action.actions_facade import ActionsFacade
@@ -7,20 +9,15 @@ from physical.controller.pedal_zero_controller.mvc.updates_observer_physical imp
 from physical.controller.pedal_zero_controller.mvc.params.params_controller import ParamsController
 from physical.controller.pedal_zero_controller.mvc.patches.patches_controller import PatchesController
 
-from physical.base.controller import Controller
 
-
-class PedalZeroController(Controller):
-
-    app = None
-    config = None
-    components = None
-    observer = None
-    controllers = None
-    actions = None
+class SimplePatchGpioZeroController(Component):
+    """
+    Change the current patch with next and before patch
+    buttons and view the current patch by SevenSegmentsDisplay
+    """
 
     def __init__(self, application, test=False):
-        super(PedalZeroController, self).__init__(application, self.__class__.__name__)
+        super(SimplePatchGpioZeroController, self).__init__(application)
 
         self.app = application
         self.config = Configurations(test=test)

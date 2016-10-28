@@ -4,24 +4,16 @@
 
 from tkinter import Canvas
 
-from util.ImageUtils import ImageUtils
+from util.color import Color
+from util.image_utils import ImageUtils
 
-from drawer.buffer.DisplayBuffer import DisplayBuffer
+from drawer.buffer.display_buffer import DisplayBuffer
 
 
 class DisplayGraphics(object):
     """
     A Graphics implementation for any Display type
     """
-
-    display = None
-
-    canvas = None
-
-    display_buffer = None
-
-    initial_color = None
-
     def __init__(self, display, initial_color):
         """
         :param Display display:
@@ -38,8 +30,9 @@ class DisplayGraphics(object):
 
     def dispose(self):
         pixels = ImageUtils.get_pixels_of(self.canvas)
-        #self._draw_display(pixels)
-        self.display.redraw_test(pixels)
+        self._draw_display(pixels)
+        self.display.redraw()
+        #self.display.redraw_test(pixels)
 
     def _draw_display(self, pixels):
         """

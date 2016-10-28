@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 
-from MonochomaticDisplay import MonochomaticDisplay
+from monochomatic_display import MonochomaticDisplay
 from impl.pcd8544.PCD8544Constants import DisplaySize
 from impl.pcd8544.PCB8544DDRamBank import PCB8544DDRamBank
 
@@ -18,71 +18,71 @@ class PCB8544DisplayDataRam(object):
     See Pcd8544 datasheet for more information.
     """
 
-    dataBuffer = [[None] * DisplayDataRamSize.DDRAM_HEIGHT for _ in range(DisplayDataRamSize.DDRAM_WIDTH)]
+    data_buffer = [[None] * DisplayDataRamSize.DDRAM_HEIGHT for _ in range(DisplayDataRamSize.DDRAM_WIDTH)]
 
     display = None
-    initialColor = None
+    initial_color = None
 
     changes = None
 
-    def __init__(self, display, initialColor):
+    def __init__(self, display, initial_color):
         """
-        :param PCD8544DisplayComponent display
-        :param initialColor color
+        :param PCD8544DisplayComponent display:
+        :param Color initial_color:
         """
         self.display = display
-        self.initialColor = initialColor
+        self.initial_color = initial_color
 
         self.changes = deque()
 
         for x in range(DisplayDataRamSize.DDRAM_WIDTH):
             for y in range(DisplayDataRamSize.DDRAM_HEIGHT):
-                bank = PCB8544DDRamBank(x, y, initialColor)
-                self.dataBuffer[x][y] = bank
+                bank = PCB8544DDRamBank(x, y, initial_color)
+                self.data_buffer[x][y] = bank
                 self.changes.append(bank)
 
-    def setPixel(self, x, y, color):
-        if not self._isPositionExists(x, y):
+    def set_pixel(self, x, y, color):
+        if not self._is_position_exists(x, y):
             raise IndexError("Position ("+x+", "+y+") don't exists")
 
         if not (color == MonochomaticDisplay.DARK) and \
            not (color == MonochomaticDisplay.LIGHT):
-            raise Exception("The color should be MonochomaticDisplay.DARK or MonochomaticDisplay.LIGHT!")
+            raise Exception("The color should be MonochromaticDisplay.DARK or Monochromatic.LIGHT!")
 
-        bank = self.getBank(x, y)
-        anotherChangeRegistred = bank.hasChanged()
+        bank = self.get_bank(x, y)
+        another_change_registered = bank.changed
 
         bank.setPixel(y % 8, color)
 
-        if bank.hasChanged() and not anotherChangeRegistred:
+        if bank.changed and not another_change_registered:
             self.changes.append(bank)
 
-    def getBank(self, x, y):
+    def get_bank(self, x, y):
         """
         :param int x:
         :param int y:
         :return PCD8544DDRamBank:
         """
-        return self.dataBuffer[x][int(y/8)]
+        return self.data_buffer[x][int(y / 8)]
 
     def getPixel(self, x, y):
         """
         :param int x:
         :param int y:
         """
-        if not self._isPositionExists(x, y):
+        if not self._is_position_exists(x, y):
             raise IndexError("Position (" + str(x) + ", " + str(y) + ") don't exists")
 
-        return self.getBank(x, y).getPixel(y)
+        return self.get_bank(x, y).getPixel(y)
 
-    def _isPositionExists(self, x, y):
-        notExists = x < 0 \
-                 or y < 0 \
-                 or x >= self.display.width \
-                 or y >= self.display.height
-        return not notExists
+    def _is_position_exists(self, x, y):
+        not_exists = x < 0 \
+                  or y < 0 \
+                  or x >= self.display.width \
+                  or y >= self.display.height
+        return not not_exists
 
     def clear(self):
         for x in range(DisplaySize.WIDTH):
             for y in range(DisplaySize.HEIGHT):
-                self.setPixel(x, y, self.initialColor)
+                self.set_pixel(x, y, self.initial_color)

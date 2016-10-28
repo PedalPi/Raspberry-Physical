@@ -1,40 +1,35 @@
-from util.Color import Color
+from util.color import Color
 
 
 class PCB8544DDRamBank(object):
-    '''
+    """
     Display Data Ram Bank abstraction
     See Pcd8544 datasheet for more information.
-    '''
+    """
     x = 0
     y = 0
     colors = []
     changed = False
 
-    def __init__(self, x, y, initialColor):
+    def __init__(self, x, y, initial_color):
         self.x = x
         self.y = y
 
         self.changed = False
-        self.colors = [initialColor] * 8
+        self.colors = [initial_color] * 8
 
     def setPixel(self, y, color):
-        if self.colors[y] != color:
-            self.changed = True
+        if self.colors[y] == color:
+            return
 
+        self.changed = True
         self.colors[y] = color
 
     def getPixel(self, y):
         return self.colors[y]
 
-    def setChanged(self, changed):
-        self.changed = changed
-
-    def hasChanged(self):
-        return self.changed
-
     def lsbIterator(self):
-        """ @Deprecated """
+        """ TODO - Deprecated """
         return None
 
     def msbIterator(self):
@@ -51,8 +46,6 @@ class PCB8544DDRamBank(object):
         return value
 
 class MsbIterator:
-    bank = None
-    count = None
 
     def __init__(self, bank):
         """

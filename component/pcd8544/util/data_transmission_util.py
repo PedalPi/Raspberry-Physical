@@ -8,9 +8,9 @@ class BitOrderFirst(Enum):
     MSB = 2
 
 
-class DataTransmitionUtil:
+class DataTransmissionUtil:
     """
-    Utils for change data transmittion
+    Utils for change data transmission
 
     @author SrMouraSilva
     Based in 2013 Giacomo Trudu - wicker25[at]gmail[dot]com
@@ -26,31 +26,31 @@ class DataTransmitionUtil:
         :deprecated FIXME Use native shiftOut!
         """
         if order == BitOrderFirst.MSB:
-            DataTransmitionUtil.write_data_mbs_first(data, data_pin, clock_pin)
+            DataTransmissionUtil.write_data_mbs_first(data, data_pin, clock_pin)
         else:
-            DataTransmitionUtil.write_data_lsb_first(data, data_pin, clock_pin)
+            DataTransmissionUtil.write_data_lsb_first(data, data_pin, clock_pin)
 
     @staticmethod
     def write_data_mbs_first(data, data_pin, clock_pin):
-        DataTransmitionUtil.write(data, data_pin, clock_pin, range(8))
+        DataTransmissionUtil.write(data, data_pin, clock_pin, range(8))
 
     @staticmethod
     def write_data_lsb_first(data, data_pin, clock_pin):
-        DataTransmitionUtil.write(data, data_pin, clock_pin, reversed(range(8)))
+        DataTransmissionUtil.write(data, data_pin, clock_pin, reversed(range(8)))
 
     @staticmethod
-    def write(data, data_pin, clock_pin, range_oder):
+    def write(data, data_pin, clock_pin, range_order):
         """
         :param byte data:
         :param DigitalOutput data_pin:
         :param DigitalOutput clock_pin:
-        :param list range_oder: bits order to send
+        :param list range_order: bits order to send
         """
-        for i in range_oder:
-            bit_state = DataTransmitionUtil.bit_state(data, i)
+        for i in range_order:
+            bit_state = DataTransmissionUtil.bit_state(data, i)
             data_pin.on() if bit_state else data_pin.off()
 
-            DataTransmitionUtil.toggle_clock(clock_pin)
+            DataTransmissionUtil.toggle_clock(clock_pin)
 
     @staticmethod
     def bit_state(data, i):
@@ -60,7 +60,8 @@ class DataTransmitionUtil:
     def toggle_clock(clock):
         clock.on()
         # The pin changes usign wiring pi are 20ns?
-        # The pi4j in Snapshot 1.1.0 are 1MHz ~ 1 microssecond in Raspberry 2      http://www.savagehomeautomation.com/projects/raspberry-pi-with-java-programming-the-internet-of-things-io.html#follow_up_pi4j
+        # The pi4j in Snapshot 1.1.0 are 1MHz ~ 1 microssecond in Raspberry 2
+        #  http://www.savagehomeautomation.com/projects/raspberry-pi-with-java-programming-the-internet-of-things-io.html#follow_up_pi4j
         # Its necessary only 10ns    Pag 22 - https://www.sparkfun.com/datasheets/LCD/Monochrome/Nokia5110.pdf
         # Not discoment :D
         #Gpio.delayMicroseconds(CLOCK_TIME_DELAY);

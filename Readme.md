@@ -27,6 +27,10 @@ Display, buttons status, leds are configured here
  - 3 (foot) buttons for Patch and parameter
  - 1 Rotary Encoder with button, for selection and change effect params
 
+## Requirements
+
+SpiDev
+
 ## To install
 
 Not implemented yet

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from impl.TkDisplayComponent import TkDisplayComponent
+#from impl.TkDisplayComponent import TkDisplayComponent
 from impl.PCD8544 import PCD8544
-from drawer.DisplayGraphics import DisplayGraphics
+from drawer.display_graphics import DisplayGraphics
 
-from util.Color import Color
+from util.color import Color
 
 #from time import sleep
 
@@ -15,8 +15,9 @@ def sleep(a):
 #  - PCD8544: Nokia 3110 and 5110
 #  - Tk: For tests in pc develop
 #display = TkDisplayComponent(500, 400, True)
-display = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7, contrast=60, inverse=False)
 
+display = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7, contrast=60, inverse=False)
+print(display)
 
 #print("Test: Display single pixel.\n")
 #display.setPixel(10, 10, Color.BLACK)
@@ -26,7 +27,7 @@ display = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7, contrast=60, inverse=Fals
 #display.redraw()
 
 
-# WARNING - DisplayGraphics ignore ALL manual changes (by display.setPixel())
+# WARNING - DisplayGraphics ignore ALL manual changes (by display.set_pixel())
 graphics = DisplayGraphics(display, Color.WHITE)
 
 # Cleaning the display
@@ -51,22 +52,21 @@ graphics = DisplayGraphics(display, Color.WHITE)
 #sleep(5000)
 
 # Drawing images
-print("Test: Draw image.\n")
+#print("Test: Draw image.\n")
 #baseName = System.getProperty("user.dir") + File.separator + "lib" \
 #+ File.separator
 #imageName = baseName + "pi4j-header-small3.png"
 #String imageName = baseName + "test.png"
 
-#try {
+#try:
 #    Image image = ImageIO.read(new File(imageName))
 
 #    graphics.drawImage(image, 0, 0, null)
 #    graphics.dispose()
 #    graphics.clear()
-#} catch (IOException e) {
+#raise IOException e:
 #    System.err.println("Possibly image was not found :/")
 #    e.printStackTrace()
-#}
 
 #sleep(5000)
 
@@ -74,14 +74,13 @@ print("Test: Draw image.\n")
 
 print("Test: Draw lines.\n")
 
-
-
 for i in range(0, 84, 4):
     graphics.canvas.create_line(i, 0, i, 47)
     graphics.dispose()
 
 graphics.clear()
 
+print(2)
 for i in range(0, 48, 4):
     graphics.canvas.create_line(0, i, 83, i)
     graphics.dispose()

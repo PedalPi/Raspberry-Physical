@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import deque
 
-from drawer.buffer.PixelBuffer import PixelBuffer
+from drawer.buffer.pixel_buffer import PixelBuffer
 
 
 class DisplayBuffer(object):
@@ -10,7 +10,7 @@ class DisplayBuffer(object):
 
 
     Change the required pixels and - for update the
-    real component display - calls getChanges() method.</p>
+    real component display - calls getChanges() method.
 
     This will only return the pixel that has actually changed,
     avoiding unnecessary updates.
@@ -30,13 +30,6 @@ class DisplayBuffer(object):
     you can create a special buffer implementation in these cases.
     Find class PCB8544DisplayDataRam for inspiration!
     """
-    changes = deque()
-
-    data_buffer = None
-
-    width = 0
-    height = 0
-    default_color = 0
 
     def __init__(self, width, height, default_color):
         """
@@ -46,6 +39,8 @@ class DisplayBuffer(object):
                            (in the initial state, is assumed that all the
                             pixels are in the currentColor)
         """
+        self.changes = deque()
+
         self.width = width
         self.height = height
         self.data_buffer = [[None] * height for _ in range(width)]
@@ -99,9 +94,6 @@ class DisplayBuffer(object):
 
 
 class DisplayBufferIterator(object):
-    changes = None
-
-    _nextElement = None
 
     def __init__(self, changes):
         """
@@ -109,10 +101,11 @@ class DisplayBufferIterator(object):
         """
         print("Total de mudanças computadas", len(changes))
         self.changes = changes
+        self._next_element = None
 
     def has_next(self):
-        self._nextElement = self._find_next()
-        return self._nextElement is not None
+        self._next_element = self._find_next()
+        return self._next_element is not None
 
     def _find_next(self):
         while self.changes:
@@ -124,7 +117,7 @@ class DisplayBufferIterator(object):
         return None
 
     def next_element(self):
-        pixel_buffer = self._nextElement
-        pixel_buffer.updateLastChangeColor()
+        pixel_buffer = self._next_element
+        pixel_buffer.update_last_change_color()
 
         return pixel_buffer

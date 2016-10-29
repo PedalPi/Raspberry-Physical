@@ -3,6 +3,7 @@ from PIL import ImageFont
 import time
 
 display = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7, contrast=60, inverse=False)
+#display = PCD8544(dc=25, sclk=11, din=10, cs=3, rst=2, contrast=60, inverse=False)
 print(display)
 
 # List installed fonts: fc-list
@@ -16,7 +17,6 @@ font = ImageFont.truetype('Roboto-Regular.ttf', size=15)
 display.draw.text((10, 25), "world", font=font, fill=1)
 display.dispose()
 
-''''''
 time.sleep(1)
 
 display.clear()
@@ -108,3 +108,7 @@ for i in range(48):
 
 display.clear()
 #sleep(5000)
+
+
+#display2 = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7, contrast=60, inverse=False)
+#display3 = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7, contrast=60, inverse=False)

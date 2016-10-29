@@ -63,7 +63,7 @@ class PCD8544(SPIDevice):
         self._send_command(SysCommand.BIAS | Setting.BIAS_BS2)
         self._send_command(SysCommand.VOP | contrast & 0x7f)
         # H = 0
-        self._send_command(SysCommand.FUNC)
+        self._send_command(SysCommand.FUNC | Setting.FUNC_V)
         self._send_command(
             SysCommand.DISPLAY |
             Setting.DISPLAY_D |
@@ -82,17 +82,10 @@ class PCD8544(SPIDevice):
         self.DC.on()
         self._spi.write([byte])
 
-    def _send_data_bytes(self, x, y, bytes):
-        self._set_cursor_x(x)
-        self._set_cursor_y(y)
-
-        self.DC.on()
-        self._spi.write(bytes)
-
     def set_contrast(self, value):
         self._send_command(SysCommand.FUNC | Setting.FUNC_H)
         self._send_command(SysCommand.VOP | value & 0x7f)
-        self._send_command(SysCommand.FUNC)
+        self._send_command(SysCommand.FUNC | Setting.FUNC_V)
 
     def set_pixel(self, x, y, color):
         self.DDRAM.set_pixel(x, y, color)
@@ -100,39 +93,20 @@ class PCD8544(SPIDevice):
     def get_pixel(self, x, y):
         return self.DDRAM.getPixel(x, y)
 
+    def write_all(self, data):
+        self._set_cursor_x(0)
+        self._set_cursor_y(0)
+
+        self.DC.on()
+        self._spi.write(data)
+
     def redraw(self):
-        #start_time1 = time.time()
-        #print("Realizando redraw")
         changes = self.DDRAM.changes
-        #print("Total de mudanças: ", len(changes))
 
         while changes:
             bank = changes.popleft()
             self._send_data_byte(bank.x, bank.y, bank.mbs_byte)
             bank.changed = False
-
-        #print(" Redraw time: %s seconds " % (time.time() - start_time1))
-
-    def redraw_test(self, pixelss):
-        print("Realizando redraw_test")
-        self._setCursorX(0)
-        self._setCursorY(0)
-
-        import time
-        start_time = time.time()
-
-        self.SCE.off()
-        self.DC.on()
-        for pixels in pixelss:
-            for pixel in pixels:
-                if pixel == Color.BLACK:
-                    self.DIN.on()
-                else:
-                    self.DIN.off()
-                self._toggleClock()
-
-        self.SCE.on()
-        print("--- %s seconds ---" % (time.time() - start_time))
 
     def _set_cursor_x(self, x):
         self._send_command(SysCommand.XADDR | x)

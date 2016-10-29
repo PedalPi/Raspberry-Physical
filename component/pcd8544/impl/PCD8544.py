@@ -6,14 +6,10 @@ from gpiozero import SPIDevice
 
 from util.color import Color
 
-from monochomatic_display import MonochomaticDisplay
 from impl.pcd8544.PCB8544DisplayDataRam import PCB8544DisplayDataRam
 from impl.pcd8544.PCD8544Constants import DisplaySize, SysCommand, Setting
 
-from util.data_transmission_util import BitOrderFirst, DataTransmissionUtil
 
-
-#class PCD8544(MonochomaticDisplay):
 class PCD8544(SPIDevice):
     """
     PCD8544 display implementation.
@@ -48,11 +44,8 @@ class PCD8544(SPIDevice):
         super(PCD8544, self).__init__(clock_pin=sclk, mosi_pin=din, miso_pin=9, select_pin=cs)
         self.DDRAM = PCB8544DisplayDataRam(self, Color.WHITE)
 
-        #self.DIN = DigitalOutputDevice(din)
-        #self.SCLK = DigitalOutputDevice(sclk)
         self.DC = DigitalOutputDevice(dc)
         self.RST = DigitalOutputDevice(rst)
-        #self.SCE = DigitalOutputDevice(cs)
 
         self._reset()
         self._init(contrast, inverse)
@@ -78,27 +71,23 @@ class PCD8544(SPIDevice):
         )
 
     def _send_command(self, data):
-        #self.SCE.off()
         self.DC.off()
 
         self._spi.write([data])
-        #self._write_data_shift_out(data)
 
-        #self.SCE.on()
+    def _send_data_byte(self, x, y, byte):
+        self._set_cursor_x(x)
+        self._set_cursor_y(y)
 
-    def _write_data_shift_out(self, data):
-        DataTransmissionUtil.shift_out(data, self.DIN, self.SCLK, BitOrderFirst.MSB)
+        self.DC.on()
+        self._spi.write([byte])
 
-    def _toggle_clock(self):
-        self.SCLK.on()
-        # The pin changes usign wiring pi are 20ns?
-        # The pi4j in Snapshot 1.1.0 are 1MHz ~ 1 microssecond in Raspberry 2
-        #  http://www.savagehomeautomation.com/projects/raspberry-pi-with-java-programming-the-internet-of-things-io.html#follow_up_pi4j
-        # Its necessary only 10ns
-        #  Pag 22 - https://www.sparkfun.com/datasheets/LCD/Monochrome/Nokia5110.pdf
-        # Not discoment :D
-        #Gpio.delayMicroseconds(CLOCK_TIME_DELAY);
-        self.SCLK.off()
+    def _send_data_bytes(self, x, y, bytes):
+        self._set_cursor_x(x)
+        self._set_cursor_y(y)
+
+        self.DC.on()
+        self._spi.write(bytes)
 
     def set_contrast(self, value):
         self._send_command(SysCommand.FUNC | Setting.FUNC_H)
@@ -112,33 +101,22 @@ class PCD8544(SPIDevice):
         return self.DDRAM.getPixel(x, y)
 
     def redraw(self):
-        print("Realizando redraw")
+        #start_time1 = time.time()
+        #print("Realizando redraw")
         changes = self.DDRAM.changes
-        print("Total de mudanças: ", len(changes))
-
-        start_time = time.time()
+        #print("Total de mudanças: ", len(changes))
 
         while changes:
             bank = changes.popleft()
             self._send_data_byte(bank.x, bank.y, bank.mbs_byte)
             bank.changed = False
 
-        print("--- %s seconds ---" % (time.time() - start_time))
-
-    def _send_data_byte(self, x, y, byte):
-        self._set_cursor_x(x)
-        self._set_cursor_y(y)
-
-        #self.SCE.off()
-        self.DC.on()
-        #self._write_data_shift_out(byte)
-        self._spi.write([byte])
-        #self.SCE.on()
+        #print(" Redraw time: %s seconds " % (time.time() - start_time1))
 
     def redraw_test(self, pixelss):
         print("Realizando redraw_test")
-        self._set_cursor_x(0)
-        self._set_cursor_y(0)
+        self._setCursorX(0)
+        self._setCursorY(0)
 
         import time
         start_time = time.time()
@@ -151,7 +129,7 @@ class PCD8544(SPIDevice):
                     self.DIN.on()
                 else:
                     self.DIN.off()
-                self._toggle_clock()
+                self._toggleClock()
 
         self.SCE.on()
         print("--- %s seconds ---" % (time.time() - start_time))

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 #from impl.TkDisplayComponent import TkDisplayComponent
 from impl.PCD8544 import PCD8544
-from drawer.display_graphics import DisplayGraphics
+#from drawer.display_graphics import DisplayGraphics
+from drawer.display_graphics_pil import DisplayGraphicsPil as DisplayGraphics
 
 from util.color import Color
 
@@ -74,26 +75,39 @@ graphics = DisplayGraphics(display, Color.WHITE)
 
 print("Test: Draw lines.\n")
 
+import time
+from PIL import ImageDraw
+
+draw = ImageDraw.Draw(graphics.image)
+
 for i in range(0, 84, 4):
+    start_time1 = time.time()
+    draw.line((i, 0, i, 47), fill=1)
+    print(" Time to draw line: %s seconds" % (time.time() - start_time1))
+
+    '''
     graphics.canvas.create_line(i, 0, i, 47)
+    start_time1 = time.time()
+    '''
     graphics.dispose()
+    print(" Time complete to draw: %s seconds" % (time.time() - start_time1))
 
 graphics.clear()
 
 print(2)
 for i in range(0, 48, 4):
-    graphics.canvas.create_line(0, i, 83, i)
+    draw.line((0, i, 83, i), fill=1)
     graphics.dispose()
 
 graphics.clear()
 
 for i in range(0, 84, 4):
     print((0, 0), (i, 47))
-    graphics.canvas.create_line(0, 0, i, 47)
+    draw.line((0, 0, i, 47), fill=1)
     graphics.dispose()
 
 for i in range(0, 48, 4):
-    graphics.canvas.create_line(0, 0, 83, i)
+    draw.line((0, 0, 83, i), fill=1)
     graphics.dispose()
 
 
@@ -128,3 +142,5 @@ for i in range(0, 48, 6):
 
 graphics.clear()
 #sleep(5000)
+
+del draw

@@ -29,7 +29,7 @@ Display, buttons status, leds are configured here
 
 ## Requirements
 
-SpiDev
+SpiDev, Pillow (sudo apt-get install libjpeg8-dev or `CFLAGS="--disable-jpeg" pip install pillow`)
 
 ## To install
 

@@ -29,8 +29,13 @@ class DisplayGraphics(object):
         self.display.clear()
 
     def dispose(self):
+        import time
+        start_time = time.time()
         pixels = ImageUtils.get_pixels_of(self.canvas)
+        print("~~~ - %s seconds |||" % (time.time() - start_time))
+
         self._draw_display(pixels)
+        print("~~~ - %s seconds |||" % (time.time() - start_time))
         self.display.redraw()
         #self.display.redraw_test(pixels)
 

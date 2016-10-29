@@ -4,10 +4,9 @@ import time
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
 from gpiozero import SPIDevice
 
-from util.color import Color
+from display_graphics import DisplayGraphics
 
-from impl.pcd8544.PCB8544DisplayDataRam import PCB8544DisplayDataRam
-from impl.pcd8544.PCD8544Constants import DisplaySize, SysCommand, Setting
+from pcd8544_constants import DisplaySize, SysCommand, Setting
 
 
 class PCD8544(SPIDevice):
@@ -42,7 +41,6 @@ class PCD8544(SPIDevice):
     """
     def __init__(self, din, sclk, dc, rst, cs, contrast=60, inverse=False):
         super(PCD8544, self).__init__(clock_pin=sclk, mosi_pin=din, miso_pin=9, select_pin=cs)
-        self.DDRAM = PCB8544DisplayDataRam(self, Color.WHITE)
 
         self.DC = DigitalOutputDevice(dc)
         self.RST = DigitalOutputDevice(rst)
@@ -50,7 +48,9 @@ class PCD8544(SPIDevice):
         self._reset()
         self._init(contrast, inverse)
 
-        self.redraw()
+        self.drawer = DisplayGraphics(self)
+        self.clear()
+        self.dispose()
 
     def _reset(self):
         self.RST.off()
@@ -87,26 +87,12 @@ class PCD8544(SPIDevice):
         self._send_command(SysCommand.VOP | value & 0x7f)
         self._send_command(SysCommand.FUNC | Setting.FUNC_V)
 
-    def set_pixel(self, x, y, color):
-        self.DDRAM.set_pixel(x, y, color)
-
-    def get_pixel(self, x, y):
-        return self.DDRAM.getPixel(x, y)
-
     def write_all(self, data):
         self._set_cursor_x(0)
         self._set_cursor_y(0)
 
         self.DC.on()
         self._spi.write(data)
-
-    def redraw(self):
-        changes = self.DDRAM.changes
-
-        while changes:
-            bank = changes.popleft()
-            self._send_data_byte(bank.x, bank.y, bank.mbs_byte)
-            bank.changed = False
 
     def _set_cursor_x(self, x):
         self._send_command(SysCommand.XADDR | x)
@@ -115,10 +101,10 @@ class PCD8544(SPIDevice):
         self._send_command(SysCommand.YADDR | y)
 
     def clear(self):
-        self.DDRAM.clear()
-
         self._set_cursor_x(0)
         self._set_cursor_y(0)
+
+        self.drawer.clear()
 
     @property
     def width(self):
@@ -127,3 +113,17 @@ class PCD8544(SPIDevice):
     @property
     def height(self):
         return DisplaySize.HEIGHT
+
+    @property
+    def value(self):
+        return 0
+
+    def close(self):
+        super(PCD8544, self).close()
+
+    @property
+    def draw(self):
+        return self.drawer.draw
+
+    def dispose(self):
+        self.drawer.dispose()

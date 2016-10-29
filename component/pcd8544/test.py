@@ -1,58 +1,38 @@
-# -*- coding: utf-8 -*-
-#from impl.TkDisplayComponent import TkDisplayComponent
-from impl.PCD8544 import PCD8544
-#from drawer.display_graphics import DisplayGraphics
-from drawer.display_graphics_pil import DisplayGraphicsPil as DisplayGraphics
-
-from util.color import Color
-
-#from time import sleep
-
-def sleep(a):
-    pass
-
-# Get a display compoment
-# Implemented:
-#  - PCD8544: Nokia 3110 and 5110
-#  - Tk: For tests in pc develop
-#display = TkDisplayComponent(500, 400, True)
+from pcd8544 import PCD8544
+from PIL import ImageFont
+import time
 
 display = PCD8544(dc=25, sclk=11, din=10, cs=8, rst=7, contrast=60, inverse=False)
 print(display)
 
-#print("Test: Display single pixel.\n")
-#display.setPixel(10, 10, Color.BLACK)
+# List installed fonts: fc-list
+font = ImageFont.truetype('Roboto-Regular.ttf')
+#font = ImageFont.load_default()
+display.draw.text((10, 10), "hello", font=font, fill=1)
+display.dispose()
+time.sleep(0.100)
 
-# For any display changes, if you need to show the changes
-# call display.redraw()
-#display.redraw()
+font = ImageFont.truetype('Roboto-Regular.ttf', size=15)
+display.draw.text((10, 25), "world", font=font, fill=1)
+display.dispose()
 
+''''''
+time.sleep(1)
 
-# WARNING - DisplayGraphics ignore ALL manual changes (by display.set_pixel())
-graphics = DisplayGraphics(display, Color.WHITE)
+display.clear()
+display.dispose()
 
-# Cleaning the display
-#print("Clear")
-#graphics.clear()
+display.drawer.open("image-test.gif")
+display.dispose()
 
-#sleep(5000)
+time.sleep(1)
 
-# Writting text in a (x, y) position
-#graphics.drawString("Pi4j!", 0, 20)
+display.clear()
+display.drawer.open("image-test.png")
+display.dispose()
 
-# It's possible set the font and style usign Font:
-#Font font = new Font("Serif", Font.PLAIN, 15)
-#graphics.setFont(font)
+time.sleep(1)
 
-# graphics.dispose is the REDRAW method
-# this implementation is imcompatible with Java specification :(
-# FIXME - Create a new method redraw for redraw :P
-#graphics.dispose()
-#graphics.clear()
-
-#sleep(5000)
-
-# Drawing images
 #print("Test: Draw image.\n")
 #baseName = System.getProperty("user.dir") + File.separator + "lib" \
 #+ File.separator
@@ -69,78 +49,62 @@ graphics = DisplayGraphics(display, Color.WHITE)
 #    System.err.println("Possibly image was not found :/")
 #    e.printStackTrace()
 
-#sleep(5000)
+print("Test: Draw multiple circles.\n")
+for i in range(0, 84, 4):
+    coord0 = (41 - i / 2, 21 - i / 2)
+    coord1 = (coord0[0] + i, coord0[1] + i)
 
-# Line, rectangle, circle (oval) tests
+    display.draw.ellipse([coord0, coord1], outline=1, fill=None)
+    display.dispose()
+
+display.clear()
+display.dispose()
 
 print("Test: Draw lines.\n")
 
-import time
-from PIL import ImageDraw
-
-draw = ImageDraw.Draw(graphics.image)
-
 for i in range(0, 84, 4):
     start_time1 = time.time()
-    draw.line((i, 0, i, 47), fill=1)
-    print(" Time to draw line: %s seconds" % (time.time() - start_time1))
+    display.draw.line((i, 0, i, 47), fill=1)
 
-    '''
-    graphics.canvas.create_line(i, 0, i, 47)
-    start_time1 = time.time()
-    '''
-    graphics.dispose()
+    print(" Time to draw line: %s seconds" % (time.time() - start_time1))
+    display.dispose()
     print(" Time complete to draw: %s seconds" % (time.time() - start_time1))
 
-graphics.clear()
+display.clear()
 
 print(2)
 for i in range(0, 48, 4):
-    draw.line((0, i, 83, i), fill=1)
-    graphics.dispose()
+    display.draw.line((0, i, 83, i), fill=1)
+    display.dispose()
 
-graphics.clear()
+display.clear()
 
 for i in range(0, 84, 4):
     print((0, 0), (i, 47))
-    draw.line((0, 0, i, 47), fill=1)
-    graphics.dispose()
+    display.draw.line((0, 0, i, 47), fill=1)
+    display.dispose()
 
 for i in range(0, 48, 4):
-    draw.line((0, 0, 83, i), fill=1)
-    graphics.dispose()
+    display.draw.line((0, 0, 83, i), fill=1)
+    display.dispose()
 
-
-graphics.clear()
+display.clear()
 #sleep(5000)
 
 print("Test: Draw rectangles.\n")
 for i in range(0, 48, 2):
     print((i, i), (83 - i, 47 - i))
-    graphics.canvas.create_rectangle(i, i, 83 - i, 47 - i, width=1, outline=Color.BLACK.value)
-    graphics.dispose()
+    display.draw.rectangle(((i, i), (83 - i, 47 - i)), outline=0, fill=1)
+    display.dispose()
 
-graphics.clear()
+display.clear()
 #sleep(5000)
 
 print("Test: Draw multiple rectangles.\n")
 for i in range(48):
-    color = Color.BLACK.value if i % 2 == 0 else Color.WHITE.value
-    graphics.canvas.create_rectangle(i, i, 83 - i, 47 - i, fill=color, width=1)
-    graphics.dispose()
+    color = 1 if i % 2 == 0 else 0
+    display.draw.rectangle(((i, i), (83 - i, 47 - i)), outline=color, fill=color)
+    display.dispose()
 
-graphics.clear()
+display.clear()
 #sleep(5000)
-
-
-print("Test: Draw multiple circles.\n")
-graphics.setColor(Color.BLACK)
-for i in range(0, 48, 6):
-    graphics.drawOval(41 - i / 2, 41 - i / 2, i, i)
-    graphics.dispose()
-
-
-graphics.clear()
-#sleep(5000)
-
-del draw

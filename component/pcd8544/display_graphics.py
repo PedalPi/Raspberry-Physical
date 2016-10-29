@@ -1,34 +1,26 @@
 # -*- coding: utf-8 -*-
-#http://zetcode.com/gui/tkinter/drawing/
-#https://mail.python.org/pipermail/tutor/2012-November/092795.html
-
 from functools import reduce
 import numpy
 
-from drawer.buffer.display_buffer import DisplayBuffer
 from PIL import Image, ImageDraw
 
-class DisplayGraphicsPil(object):
+
+class DisplayGraphics(object):
+
     """
     A Graphics implementation for any Display type usign Pillow
     """
-    def __init__(self, display, initial_color):
+    def __init__(self, display):
         """
         :param Display display:
-        :param Color initial_color:
         """
         self.display = display
         self.image = Image.new('1', (display.width, display.height))
 
-        self.display_buffer = DisplayBuffer(display.width, display.height, initial_color)
-        self.initial_color = initial_color
+        self.draw = ImageDraw.Draw(self.image)
 
     def clear(self):
-        draw = ImageDraw.Draw(self.image)
-
-        draw.rectangle([(0, 0), (self.display.width, self.display.height)], fill=0)
-        self.display.clear()
-        del draw
+        self.draw.rectangle([(0, 0), (self.display.width, self.display.height)], fill=0)
 
     def dispose(self):
         import time
@@ -55,7 +47,18 @@ class DisplayGraphicsPil(object):
 
         self.display.write_all(pixels)
 
-        start_time2 = time.time()
-
         print(" - Discover changes: %s seconds " % (time.time() - start_time1))
-        print(" Redraw time: %s seconds " % (time.time() - start_time2))
+
+    def close(self):
+        del self.draw
+        del self.image
+
+    def open(self, image):
+        self.close()
+
+        self.image = Image.open(image) \
+            .crop((0, 0, self.display.width, self.display.height)) \
+            .convert("1", colors=2)
+            #.resize((self.display.width, self.display.height)) \
+
+        self.draw = ImageDraw.Draw(self.image)

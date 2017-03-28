@@ -1,6 +1,7 @@
 from time import sleep
 from gpiozero.threads import GPIOThread
 
+
 class MultiplexThread(object):
     stopped = None
 

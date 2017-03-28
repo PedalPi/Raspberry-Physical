@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 import time
 
 from gpiozero import DigitalOutputDevice, PWMOutputDevice
 from gpiozero import SPIDevice
 
-from display_graphics import DisplayGraphics
+from physical.component.pcd8544.display_graphics import DisplayGraphics
 
-from pcd8544_constants import DisplaySize, SysCommand, Setting
+from physical.component.pcd8544.pcd8544_constants import DisplaySize, SysCommand, Setting
 
 
 class PCD8544(SPIDevice):

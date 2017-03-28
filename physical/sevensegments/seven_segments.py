@@ -1,8 +1,8 @@
 from gpiozero import LED, CompositeOutputDevice
-from component.sevensegments.seven_segments_dictionary import dictionary
-from component.sevensegments.multiplex_thread import MultiplexThread
-from component.sevensegments.display_strategy import CommonStrategy, NotCommonStrategy
-from component.sevensegments.text_write_strategy import TextWriteStrategy
+from physical.sevensegments.seven_segments_dictionary import dictionary
+from physical.sevensegments.multiplex_thread import MultiplexThread
+from physical.sevensegments.display_strategy import CommonStrategy, NotCommonStrategy
+from physical.sevensegments.text_write_strategy import TextWriteStrategy
 
 
 class SevenSegmentsBoard(CompositeOutputDevice):

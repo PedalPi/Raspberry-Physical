@@ -1,2 +1,4 @@
 *.pyc
 PedalPi-Physical
+build/
+PedalPi_Physical.egg-info

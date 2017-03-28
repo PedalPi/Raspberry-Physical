@@ -31,3 +31,4 @@ class MultiplexThread(object):
 
     def stop(self):
         self.stopped = True
+        self._display_thread.stop()

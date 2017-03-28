@@ -65,7 +65,6 @@ class SevenSegmentsBoard(CompositeOutputDevice):
         self._status = False
 
         if self._thread is not None:
-            print('stopped')
             self._thread.stop()
 
         for display in self.displays:

@@ -9,6 +9,4 @@ python:
 sudo: required
 
 script:
-  - git clone --recursive https://github.com/PedalPi/Physical.git Physical --depth=1
-  - cd Physical
   - python setup.py develop

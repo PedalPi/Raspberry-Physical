@@ -24,8 +24,8 @@ class MultiplexThread(object):
 
     def rewrite(self, displays):
         for display in displays:
-            display.on()
             display._rewrite()
+            display.on()
             sleep(self.sleep)
             display.off()
 
